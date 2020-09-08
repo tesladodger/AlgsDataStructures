@@ -1,0 +1,11 @@
+.idea
+*.class
+*.war
+*.ear
+
+/local.properties
+.gradle/
+/build/
+
+*.iws
+*.iml
