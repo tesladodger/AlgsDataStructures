@@ -9,49 +9,50 @@ import java.util.List;
 
 
 /**
- * Contains the information of the nodes.
- */
-class ASNode {
-    final int x;
-    final int y;
-
-    int f;  // g + h
-    int g;  // Distance from start.
-    int h;  // Heuristic distance to goal.
-
-    boolean isObstacle;
-    boolean isGoal;
-
-    List<ASNode> neighbors = new LinkedList<>();
-    ASNode cameFrom;
-
-    /**
-     * Constructor.
-     * @param x position;
-     * @param y position;
-     * @param inf = width * height;
-     */
-    ASNode (int x, int y, int inf) {
-        this.x = x;
-        this.y = y;
-        f = inf;
-        g = inf;
-        h = 0;
-    }
-}
-
-
-/**
  * Applies the A* algorithm to a square grid.
  * call constructor -> addGoals() -> addStart() -> addObstacles() -> algorithm()
  */
 public class AStar {
-    private int width;
-    private int height;
-    private int inf;
 
-    private ASNode[][] grid;
-    private Stack<Integer[]> path = new Stack<>();
+    /**
+     * Contains the information of the nodes.
+     */
+    private static class ASNode {
+        final int x;
+        final int y;
+
+        int f;  // g + h
+        int g;  // Distance from start.
+        int h;  // Heuristic distance to goal.
+
+        boolean isObstacle;
+        boolean isGoal;
+
+        List<ASNode> neighbors = new LinkedList<>();
+        ASNode cameFrom;
+
+        /**
+         * Constructor.
+         * @param x position;
+         * @param y position;
+         * @param inf = width * height;
+         */
+        ASNode (int x, int y, int inf) {
+            this.x = x;
+            this.y = y;
+            f = inf;
+            g = inf;
+            h = 0;
+        }
+    }
+
+
+    private final int width;
+    private final int height;
+    private final int inf;
+
+    private final ASNode[][] grid;
+    private final Stack<Integer[]> path = new Stack<>();
 
     private ASNode start;
     // goals is a n*2 matrix. Each row has the x and y of a goal.

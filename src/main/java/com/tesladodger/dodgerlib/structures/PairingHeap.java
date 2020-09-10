@@ -16,8 +16,8 @@ public class PairingHeap<K extends Comparable<K>, V> {
 
     private final class PNode {
         K key;
-        short n;
         V value;
+        short n;
 
         PNode child;
         PNode right;
@@ -28,18 +28,19 @@ public class PairingHeap<K extends Comparable<K>, V> {
          * @param value generic type, can be null;
          * @param n insertion number, to solve ties in LIFO;
          */
-        PNode (K key, short n, V value) {
+        PNode (K key, V value, short n) {
             this.key = key;
-            this.n = n;
             this.value = value;
+            this.n = n;
         }
     }
 
     private PNode root;
     public enum Type {MIN, MAX}
-    private Type type;
+    private final Type type;
     private int counter;
     private short n;
+
 
     /**
      * Constructor for an empty heap.
@@ -104,7 +105,7 @@ public class PairingHeap<K extends Comparable<K>, V> {
      * @param heap2 second heap;
      * @return merged heap;
      */
-    public static <K extends Comparable<K>, V> PairingHeap
+    public static <K extends Comparable<K>, V> PairingHeap<K, V>
                 merge (PairingHeap<K, V> heap1, PairingHeap<K, V> heap2) {
 
         if (heap1.type != heap2.type) throw new IllegalArgumentException("Cannot merge heaps of " +
@@ -136,7 +137,7 @@ public class PairingHeap<K extends Comparable<K>, V> {
      */
     public void insert (K key, V data) {
         if (key == null) throw new IllegalArgumentException("Key cannot be null.");
-        PNode newNode = new PNode(key, n, data);
+        PNode newNode = new PNode(key, data, n);
         n++;
         if (isEmpty()) {
             root = newNode;

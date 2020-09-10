@@ -8,6 +8,24 @@ package com.tesladodger.dodgerlib.structures;
  */
 public class HashTable<K, V> {
 
+    /**
+     * Each element in the table points to the root of a basic linked list, usually called bucket. In
+     * case of a hash collision, the root is replaced and the new node points to it.
+     * @param <K>
+     * @param <V>
+     */
+    private static class Node<K, V> {
+        K key;
+        V value;
+        Node<K, V> next;
+
+        Node (K key, V value, Node<K, V> next) {
+            this.key = key;
+            this.value = value;
+            this.next = next;
+        }
+    }
+
     /* Size of the array. It's also used as modulo for hashing. */
     private int capacity;
 
@@ -223,23 +241,4 @@ public class HashTable<K, V> {
         return key.intValue() % capacity;
     }
 
-}
-
-// ---------------------------------------------------------------------------- Node //
-/**
- * Each element in the table points to the root of a basic linked list, usually called bucket. In
- * case of a hash collision, the root is replaced and the new node points to it.
- * @param <K>
- * @param <V>
- */
-class Node<K, V> {
-    K key;
-    V value;
-    Node<K, V> next;
-
-    Node (K key, V value, Node<K, V> next) {
-        this.key = key;
-        this.value = value;
-        this.next = next;
-    }
 }

@@ -12,8 +12,7 @@ public class DualPivotQuickSort {
     private DualPivotQuickSort () {}
 
     /* Maximum array length below which insertion sort is performed. */
-    @SuppressWarnings("FieldCanBeLocal")
-    private static final int INSERTION_SORT_THRESHOLD = 17;
+    public static final int INSERTION_SORT_THRESHOLD = 17;
 
     /**
      * Sorts an array of ints.
