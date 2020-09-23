@@ -101,6 +101,11 @@ public class BinaryTreeTest {
         tree.insert(0, 0);
         tree.insert(10, 10);
 
+        System.out.println("\nTest Iterator");
+        for (Integer integer : tree) {
+            System.out.println(integer);
+        }
+
         if (tree.containsKey(49)) {
             System.out.println("\n" + tree.remove(49));
         }

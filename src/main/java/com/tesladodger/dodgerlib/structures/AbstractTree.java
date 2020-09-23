@@ -1,6 +1,7 @@
 package com.tesladodger.dodgerlib.structures;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -10,7 +11,7 @@ import java.util.NoSuchElementException;
  * @param <K>
  * @param <V>
  */
-abstract class AbstractTree<K extends Comparable<K>, V> {
+abstract class AbstractTree<K extends Comparable<K>, V> implements Iterable <V> {
 
     class Node {
         K key;
@@ -31,6 +32,10 @@ abstract class AbstractTree<K extends Comparable<K>, V> {
     /* Counter for number of elements in the tree. */
     int counter;
 
+    @Override
+    public Iterator<V> iterator () {
+        return new TreeIterator<>(this.traverse());
+    }
 
     // ------------------------------------------------------------------------ Search methods //
     /**
@@ -148,4 +153,27 @@ abstract class AbstractTree<K extends Comparable<K>, V> {
         return counter;
     }
 
+}
+
+class TreeIterator<V> implements Iterator<V> {
+
+    private final List<V> list;
+    private int current;
+
+    public TreeIterator (List<V> list) {
+        this.list = list;
+        current = 0;
+    }
+
+    @Override
+    public boolean hasNext() {
+        return current < list.size();
+    }
+
+    @Override
+    public V next() {
+        V data = list.get(current);
+        current++;
+        return data;
+    }
 }
