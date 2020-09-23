@@ -10,6 +10,14 @@ import java.util.Random;
 
 public class BinaryTreeTest {
 
+    public static void unitTests () {
+        BinaryTree<Integer, Integer> tree = new BinaryTree<>();
+        assert tree.isEmpty();
+        assert tree.size() == 0;
+
+        
+    }
+
     public static void main (String[] args) {
 
         BinaryTree<Integer, Integer> tree = new BinaryTree<>();
@@ -19,9 +27,9 @@ public class BinaryTreeTest {
         System.out.println("Making list");
         Random ran = new Random();
         List<Integer> list = new ArrayList<>();
-        int bound = 50000;
+        int bound = 1000000;
         int i = 0;
-        while (i < bound) {
+        while (i < 50000) {
             int please = ran.nextInt(bound);
             if (!list.contains(please)) {
                 list.add(please);

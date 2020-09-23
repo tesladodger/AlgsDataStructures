@@ -22,10 +22,15 @@ public class LinkedList<E> extends AbstractLinearStructure<E> {
      */
     public void add (E data) {
         Node current = root;
-        while (current.next != null) {
-            current = current.next;
+        if (current == null) {
+            root = new Node(null, data);
+        } else {
+            while (current.next != null) {
+                current = current.next;
+            }
+            current.next = new Node(null, data);
         }
-        current.next = new Node(null, data);
+        size++;
     }
 
     /**
@@ -60,20 +65,29 @@ public class LinkedList<E> extends AbstractLinearStructure<E> {
         if (index < 0 || index >= size) throw new IndexOutOfBoundsException();
         size--;
 
+        E result;
+
         if (index == 0) {
-            E toRet = root.data;
+            result = root.data;
             root = root.next;
-            return toRet;
+        } else {
+            Node parent = root;
+            for (int i = 0; i < index - 1; i++) {
+                parent = parent.next;
+            }
+            result = parent.next.data;
+            parent.next = parent.next.next;
         }
 
-        Node parent = root;
-        for (int i = 0; i < index-1; i++) {
-            parent = parent.next;
-        }
-        E toRet = parent.next.data;
-        parent.next = parent.next.next;
-        return toRet;
+        return result;
+    }
 
+    /**
+     * Clears the list.
+     */
+    public void clear () {
+        root = null;
+        size = 0;
     }
 
 }

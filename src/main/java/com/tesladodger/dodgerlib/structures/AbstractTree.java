@@ -7,7 +7,8 @@ import java.util.NoSuchElementException;
 
 
 /**
- * Contains the methods common to all tree com.tesladodger.dodgerlib.structures, mostly non-destructive methods.
+ * Contains the methods common to all tree structures , mostly non-destructive methods.
+ *
  * @param <K>
  * @param <V>
  */

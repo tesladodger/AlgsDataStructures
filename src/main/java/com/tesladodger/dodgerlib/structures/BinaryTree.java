@@ -11,6 +11,7 @@ import java.util.NoSuchElementException;
  * I really don't like deleting elements in this tree, it's way too complex...
  * On the other hand, traversing (which returns a sorted List) is very fast.
  * Traversing is the only recursive method.
+ *
  * @param <K>
  * @param <V>
  */
@@ -26,6 +27,7 @@ public class BinaryTree<K extends Comparable<K>, V> extends AbstractTree<K, V> {
     /**
      * Public method to call the recursive insertion method.
      * If this tree is empty, create the root.
+     *
      * @param key new key;
      * @param value new value;
      */
@@ -42,6 +44,7 @@ public class BinaryTree<K extends Comparable<K>, V> extends AbstractTree<K, V> {
 
     /**
      * Traverses the tree until it finds an empty spot for the new node.
+     *
      * @param key new key;
      * @param value new value;
      */
@@ -77,6 +80,7 @@ public class BinaryTree<K extends Comparable<K>, V> extends AbstractTree<K, V> {
     // ---------------------------------------------------- Remove //
     /**
      * Removes a node and returns its data.
+     *
      * @param key of the node to delete;
      * @return data;
      */
@@ -130,6 +134,7 @@ public class BinaryTree<K extends Comparable<K>, V> extends AbstractTree<K, V> {
 
     /**
      * When removing a node with only one child, only its parent's pointer must be updated.
+     *
      * @param D node being deleted;
      * @param replacement node to replace D's place in the parent;
      */
@@ -156,6 +161,7 @@ public class BinaryTree<K extends Comparable<K>, V> extends AbstractTree<K, V> {
 
     /**
      * Find the min value and remove it.
+     *
      * @return min value;
      */
     public V popMin () {
@@ -168,6 +174,7 @@ public class BinaryTree<K extends Comparable<K>, V> extends AbstractTree<K, V> {
 
     /**
      * Find the min value and remove it.
+     *
      * @return min value;
      */
     public V popMax () {
