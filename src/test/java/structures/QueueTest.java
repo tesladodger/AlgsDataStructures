@@ -36,8 +36,13 @@ public class QueueTest {
         q.enqueue(8);
         q.enqueue(9);
 
+        System.out.println("testing iterator");
+        for (Integer i : q) {
+            System.out.println(i);
+        }
+
         q.clear();
 
-        System.out.println(q.size());
+        System.out.println("\n" + q.size());
     }
 }

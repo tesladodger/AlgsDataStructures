@@ -18,6 +18,11 @@ public class StackTest {
         stack.push(2);
         stack.push(1);
 
+        System.out.println("iterator test");
+        for (Integer i : stack) {
+            System.out.println(i);
+        }
+
         System.out.println(stack.contains(6));
         System.out.println(stack.contains(0));
 

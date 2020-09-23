@@ -1,7 +1,10 @@
 package com.tesladodger.dodgerlib.structures;
 
 
-public abstract class AbstractLinearStructure<E> {
+import java.util.Iterator;
+
+
+public abstract class AbstractLinearStructure<E> implements Iterable<E> {
 
     class Node {
         Node next;
@@ -16,6 +19,10 @@ public abstract class AbstractLinearStructure<E> {
     Node root;
     int size;
 
+    @Override
+    public Iterator<E> iterator () {
+        return new LinearStructureIterator<>(this);
+    }
 
     public E peek () {
         return root.data;
@@ -45,4 +52,25 @@ public abstract class AbstractLinearStructure<E> {
         return root == null;
     }
 
+}
+
+class LinearStructureIterator<E> implements Iterator<E> {
+
+    AbstractLinearStructure<E>.Node current;
+
+    public LinearStructureIterator (AbstractLinearStructure<E> structure) {
+        current = structure.root;
+    }
+
+    @Override
+    public boolean hasNext() {
+        return current != null;
+    }
+
+    @Override
+    public E next() {
+        E data = current.data;
+        current = current.next;
+        return data;
+    }
 }

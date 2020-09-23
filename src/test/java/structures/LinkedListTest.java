@@ -27,6 +27,11 @@ public class LinkedListTest {
 
         System.out.println(list.get(5));
 
+        // Test the iterator
+        System.out.println();
+        for (Integer i : list) {
+            System.out.println(i);
+        }
     }
 
 }

@@ -76,6 +76,4 @@ public class LinkedList<E> extends AbstractLinearStructure<E> {
 
     }
 
-
-
 }

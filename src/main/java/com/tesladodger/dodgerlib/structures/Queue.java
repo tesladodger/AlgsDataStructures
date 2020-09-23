@@ -7,7 +7,7 @@ import java.util.NoSuchElementException;
  * Singly linked fifo queue of generic elements.
  * @param <E>
  */
-public class Queue<E> extends AbstractLinearStructure<E>{
+public class Queue<E> extends AbstractLinearStructure<E> {
 
     /**
      * Constructor.
@@ -30,12 +30,11 @@ public class Queue<E> extends AbstractLinearStructure<E>{
         Node n = new Node(null, data);
         if (isEmpty()) {
             root = n;
-            tail = n;
         }
         else {
             tail.next = n;
-            tail = n;
         }
+        tail = n;
         size++;
     }
 
