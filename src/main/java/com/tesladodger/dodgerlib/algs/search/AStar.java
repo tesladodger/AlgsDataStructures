@@ -1,6 +1,6 @@
 package com.tesladodger.dodgerlib.algs.search;
 
-import com.tesladodger.dodgerlib.structures.PairingHeap;
+import com.tesladodger.dodgerlib.structures.PairingHeap_old;
 import com.tesladodger.dodgerlib.structures.Stack;
 
 import java.util.HashSet;
@@ -190,7 +190,7 @@ public class AStar {
 
         // Open and closed sets.
         // The key of the pairing heap is the f score of the node. Lowest f is higher priority.
-        PairingHeap<Integer, ASNode> openSet = new PairingHeap<>(PairingHeap.Type.MIN);
+        PairingHeap_old<Integer, ASNode> openSet = new PairingHeap_old<>(PairingHeap_old.Type.MIN);
         HashSet<ASNode> closedSet = new HashSet<>();
 
         // Add the start node to the openSet.

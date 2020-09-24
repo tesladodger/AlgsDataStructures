@@ -82,25 +82,26 @@ public class BinaryTree<K extends Comparable<K>, V> extends AbstractTree<K, V> {
      * Removes a node and returns its data.
      *
      * @param key of the node to delete;
+     *
      * @return data;
      */
     public V remove (K key) {
-        V toRet;
+        V result;
         if (isEmpty()) throw new NoSuchElementException("The tree is empty.");
         // Find the node to delete.
         Node D = findIteratively(key);
         // If either left or right are null, replace D with the other, which may be null.
         if (D.left == null) {
-            toRet = D.value;
+            result = D.value;
             replaceNodeInParent(D, D.right);
         }
         else if (D.right == null) {
-            toRet = D.value;
+            result = D.value;
             replaceNodeInParent(D, D.left);
         }
         // D's children are both not null.
         else {
-            toRet = D.value;
+            result = D.value;
             // Find in-order successor.
             Node E = getMin(D.right);
             // If D's successor is it's right child. Wikipedia's algorithm fails in this case.
@@ -129,7 +130,7 @@ public class BinaryTree<K extends Comparable<K>, V> extends AbstractTree<K, V> {
             }
         }
         counter--;
-        return toRet;
+        return result;
     }
 
     /**

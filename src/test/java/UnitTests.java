@@ -1,5 +1,6 @@
 import structures.BinaryTreeTest;
 import structures.LinkedListTest;
+import structures.PairingHeapTest;
 import structures.QueueTest;
 import structures.StackTest;
 
@@ -12,7 +13,7 @@ public class UnitTests {
         LinkedListTest.unitTests();
         QueueTest.unitTests();
         BinaryTreeTest.unitTests();
-
+        PairingHeapTest.unitTests();
 
     }
 }

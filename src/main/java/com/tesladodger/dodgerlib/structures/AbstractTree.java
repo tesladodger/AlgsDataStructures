@@ -41,7 +41,9 @@ abstract class AbstractTree<K extends Comparable<K>, V> implements Iterable <V> 
     // ------------------------------------------------------------------------ Search methods //
     /**
      * Public method that calls the iterative search method.
+     *
      * @param key to find;
+     *
      * @return value of that key;
      */
     public V find (K key) {
@@ -52,7 +54,9 @@ abstract class AbstractTree<K extends Comparable<K>, V> implements Iterable <V> 
     /**
      * Traverses the tree iteratively until it finds the key.
      * Throws an error if the key is not present.
+     *
      * @param key to find;
+     *
      * @return node to be found;
      */
      Node findIteratively (K key) {
@@ -73,8 +77,10 @@ abstract class AbstractTree<K extends Comparable<K>, V> implements Iterable <V> 
 
     /**
      * I'm not proud of this.
+     *
      * @param key to your heart;
-     * @return 42;
+     *
+     * @return true if the tree contains the key;
      */
     public boolean containsKey (K key) {
         try { find(key); }
@@ -84,7 +90,9 @@ abstract class AbstractTree<K extends Comparable<K>, V> implements Iterable <V> 
 
     /**
      * Returns the minimum (left-most) node in the subtree of current.
+     *
      * @param current subtree's root;
+     *
      * @return left-most node;
      */
     Node getMin (Node current) {
@@ -94,7 +102,9 @@ abstract class AbstractTree<K extends Comparable<K>, V> implements Iterable <V> 
 
     /**
      * Returns the maximum (right-most) node in the subtree of current.
+     *
      * @param current subtree's root;
+     *
      * @return right-most node;
      */
     Node getMax (Node current) {
@@ -116,6 +126,7 @@ abstract class AbstractTree<K extends Comparable<K>, V> implements Iterable <V> 
     // ------------------------------------------------------------------------ Traverse methods //
     /**
      * Calls the recursive traverse method.
+     *
      * @return sorted list of values;
      */
     public List<V> traverse () {
@@ -127,8 +138,10 @@ abstract class AbstractTree<K extends Comparable<K>, V> implements Iterable <V> 
 
     /**
      * Recursive traverse.
+     *
      * @param current node being evaluated;
      * @param sorted list of values;
+     *
      * @return sorted list;
      */
     private List<V> traverseRecursively (Node current, List<V> sorted) {

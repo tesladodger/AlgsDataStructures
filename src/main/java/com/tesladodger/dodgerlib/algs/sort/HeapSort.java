@@ -1,6 +1,6 @@
 package com.tesladodger.dodgerlib.algs.sort;
 
-import com.tesladodger.dodgerlib.structures.PairingHeap;
+import com.tesladodger.dodgerlib.structures.PairingHeap_old;
 
 public class HeapSort {
 
@@ -19,7 +19,7 @@ public class HeapSort {
     }
 
     private static void heapSort (int[] array) {
-        PairingHeap<Integer, Object> heap = new PairingHeap<>(PairingHeap.Type.MIN);
+        PairingHeap_old<Integer, Object> heap = new PairingHeap_old<>(PairingHeap_old.Type.MIN);
         for (int x : array)
             heap.insert(x, null);
         int i = 0;
