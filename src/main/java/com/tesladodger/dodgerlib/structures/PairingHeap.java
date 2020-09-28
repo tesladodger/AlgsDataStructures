@@ -27,7 +27,7 @@ public class PairingHeap<K extends Comparable<K>, V> {
     private Node<K, V> root;
     public enum Type {MIN, MAX}
     private final Type type;
-    private int counter;
+    private int size;
 
 
     /**
@@ -38,7 +38,7 @@ public class PairingHeap<K extends Comparable<K>, V> {
     public PairingHeap (Type type) {
         this.type = type;
         root = null;
-        counter = 0;
+        size = 0;
     }
 
     /**
@@ -126,7 +126,7 @@ public class PairingHeap<K extends Comparable<K>, V> {
     public void insert (K key, V value) {
         if (key == null) throw new IllegalArgumentException("Key cannot be null.");
         root = merge(root, new Node<>(key, value));
-        counter++;
+        size++;
     }
 
     /**
@@ -139,22 +139,69 @@ public class PairingHeap<K extends Comparable<K>, V> {
 
         V result = root.value;
         root = mergeChildPairs(root);
+        size--;
+
         return result;
     }
 
+    /**
+     * Static method to clone a PairingHeap.
+     *
+     * @param heap to clone;
+     * @param <K> key type;
+     * @param <V> value type;
+     *
+     * @return new heap with same keys and values as 'heap' param;
+     */
+    public static <K extends Comparable<K>, V> PairingHeap<K, V> clone (PairingHeap<K, V> heap) {
+        PairingHeap<K, V> result = new PairingHeap<>(heap.type);
+        return cloneRecursive(heap.root, result);
+    }
 
+    /**
+     * Recursively traverses a heap and copies the keys and data to another heap.
+     *
+     * @param current node of the heap that's being cloned;
+     * @param clone resulting heap;
+     * @param <K> key type;
+     * @param <V> value type;
+     *
+     * @return clone heap;
+     */
+    private static <K extends Comparable<K>, V> PairingHeap<K, V> cloneRecursive (Node<K, V> current, PairingHeap<K, V> clone) {
+        if (current != null) {
+            cloneRecursive(current.child, clone);
+            cloneRecursive(current.right, clone);
+            clone.insert(current.key, current.value);
+        }
+        return clone;
+    }
+
+    /**
+     * A logically empty heap is one with a null root.
+     *
+     * @return true if empty;
+     */
     public boolean isEmpty () {
         return root == null;
     }
 
+    /**
+     * Logically clear the heap by nullifying its root. The garbage collection takes care of the
+     * rest.
+     */
     public void clear () {
-        counter = 0;
+        size = 0;
         root = null;
     }
 
+    /**
+     * Number of elements in the heap.
+     *
+     * @return size of the heap;
+     */
     public int size () {
-        if (isEmpty()) counter = 0;
-        return counter;
+        return size;
     }
 
 }

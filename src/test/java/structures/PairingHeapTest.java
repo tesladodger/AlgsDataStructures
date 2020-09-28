@@ -2,23 +2,60 @@ package structures;
 
 import com.tesladodger.dodgerlib.structures.PairingHeap;
 
+import java.util.Random;
+
 
 public class PairingHeapTest {
 
     public static void unitTests () {
-        PairingHeap<Integer, Integer> heap = new PairingHeap<>(PairingHeap.Type.MIN);
+        PairingHeap<Integer, Integer> heap = new PairingHeap<>();
+        assert heap.size() == 0;
+        assert heap.isEmpty();
 
-        heap.insert(0, 0);
-        heap.insert(12, 12);
-        heap.insert(6, 6);
-        heap.insert(10, 10);
-        heap.insert(1, 1);
-        heap.insert(69, 69);
+        Random ran = new Random();
 
-        for (int i = 0; i < 6; i++) {
-            System.out.println(heap.pop());
+        int i = 0;
+        while (i++ < 10000) {
+            int x = ran.nextInt(10000);
+            heap.insert(x, x);
         }
-        
-        System.out.println("");
+
+        assert !heap.isEmpty();
+
+        int peek = heap.peek();
+        int prev = heap.pop();
+        assert peek == prev;
+
+        while (!heap.isEmpty()) {
+            int p = heap.peek();
+            int x = heap.pop();
+            assert p == x;
+            assert x >= prev;
+            prev = x;
+        }
+
+        assert heap.isEmpty();
+
+        i = 0;
+        while (i++ < 100) {
+            int x = ran.nextInt(100);
+            heap.insert(x, x);
+        }
+
+        PairingHeap<Integer, Integer> clone = PairingHeap.clone(heap);
+        assert clone.size() == heap.size();
+
+        while (heap.size() > 5) {
+            int x1 = heap.pop();
+            int x2 = clone.pop();
+            assert x1 == x2;
+            assert heap.size() == clone.size();
+        }
+
+        heap.clear();
+        clone.clear();
+
+        assert heap.isEmpty();
+        assert clone.isEmpty();
     }
 }

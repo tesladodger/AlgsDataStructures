@@ -2,8 +2,73 @@ package structures;
 
 import com.tesladodger.dodgerlib.structures.HashTable;
 
+import java.util.Random;
+
 
 public class HashTableTest {
+
+    public static void unitTests () {
+        // Integer table
+        HashTable<Integer, Integer> table = new HashTable<>();
+
+        assert table.isEmpty();
+        assert table.size() == 0;
+
+        table.put(6, 6);
+        table.put(2, 2);
+        table.put(13, 13);
+        table.put(4, 4);
+
+        assert !table.isEmpty();
+        assert table.size() == 4;
+
+        assert table.get(2) == 2;
+        table.put(2, 69);
+        assert table.get(2) == 69;
+        assert table.size() == 4;
+
+        assert table.get(1) == null;
+
+        // hash collision with 2:
+        table.put(14, 14);
+        table.put(24, 24);
+        assert table.size() == 6;
+
+        int x = table.remove(2);
+        assert x == 69;
+        assert table.size() == 5;
+
+        table.remove(24);
+        Integer y = table.remove(24);
+        assert y == null;
+
+        table.clear();
+        assert table.isEmpty();
+
+        Random ran = new Random();
+        int i = 0;
+        while (i++ < 10000) {
+            int z = ran.nextInt(1000);
+            table.put(z, z);
+        }
+
+        x = 0;
+        for (Integer key : table.keys()) {
+            assert key != null;
+            assert table.get(key).equals(key);
+            x++;
+        }
+        assert x == table.size();
+
+        x = 0;
+        for (Integer value : table.values()) {
+            assert value != null;
+            x++;
+        }
+        assert x == table.size();
+
+        table.clear();
+    }
 
     public static void main (String[] args) {
 

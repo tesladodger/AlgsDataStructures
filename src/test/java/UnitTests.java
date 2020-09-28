@@ -1,4 +1,5 @@
 import structures.BinaryTreeTest;
+import structures.HashTableTest;
 import structures.LinkedListTest;
 import structures.PairingHeapTest;
 import structures.QueueTest;
@@ -14,6 +15,9 @@ public class UnitTests {
         QueueTest.unitTests();
         BinaryTreeTest.unitTests();
         PairingHeapTest.unitTests();
+        HashTableTest.unitTests();
 
+
+        System.out.println("Unit tests passed!");
     }
 }
