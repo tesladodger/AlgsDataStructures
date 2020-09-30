@@ -2,6 +2,7 @@ package structures;
 
 import com.tesladodger.dodgerlib.structures.LinkedList;
 
+
 public class LinkedListTest {
 
     public static void main (String[] args) {

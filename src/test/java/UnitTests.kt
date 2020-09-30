@@ -1,9 +1,6 @@
-import com.tesladodger.dodgerlib.structures.BinaryTree
-import com.tesladodger.dodgerlib.structures.LinkedList
-import com.tesladodger.dodgerlib.structures.Queue
-import com.tesladodger.dodgerlib.structures.Stack
-import structures.*
+import com.tesladodger.dodgerlib.structures.*
 import kotlin.random.Random
+
 
 fun stackUnitTest () {
     val stack = Stack<Int>()
@@ -11,8 +8,8 @@ fun stackUnitTest () {
     stack.push(9)
     assert(stack.size() == 1)
 
-    var x = stack.pop()
-    assert(x == 9)
+    val p = stack.pop()
+    assert(p == 9)
 
     stack.push(9)
     stack.push(8)
@@ -37,7 +34,7 @@ fun stackUnitTest () {
     stack.push(7)
     stack.push(6)
 
-    x = 6
+    var x = 6
     for (i in stack)
         assert(i == x++)
 
@@ -92,7 +89,7 @@ fun linkedListUnitTest () {
     assert(list.isEmpty)
 }
 
-fun queueUnitTests () {
+fun queueUnitTest () {
     val queue = Queue<Int>()
     assert(queue.size() == 0)
     assert(queue.isEmpty)
@@ -110,9 +107,8 @@ fun queueUnitTests () {
 
     assert(queue.size() == 10)
 
-    var x = 0
-    for (y in queue)
-        assert(y == x++)
+    for ((x, i) in queue.withIndex())
+        assert(x == i)
 
     assert(queue.dequeue() == 0)
     assert(queue.dequeue() == 1)
@@ -124,7 +120,7 @@ fun queueUnitTests () {
     assert(queue.isEmpty)
 }
 
-fun binaryTreeUnitTests () {
+fun binaryTreeUnitTest () {
     val tree = BinaryTree<Int, Int>()
     assert(tree.isEmpty)
 
@@ -181,15 +177,108 @@ fun binaryTreeUnitTests () {
     assert(tree.isEmpty)
 }
 
+fun pairingHeapUnitTest () {
+    val heap = PairingHeap<Int, Int>()
+    assert(heap.isEmpty)
+
+    for (i in 0..10000) {
+        val x = Random.nextInt(10000)
+        heap.insert(x, x)
+    }
+
+    assert(!heap.isEmpty)
+
+    val peek = heap.peek()
+    var prev = heap.pop()
+    assert(peek == prev)
+
+    while (!heap.isEmpty) {
+        val p = heap.peek()
+        assert(p == heap.pop())
+        assert(p >= prev)
+        prev = p
+    }
+
+    for (i in 0..100) {
+        val x = Random.nextInt(100)
+        heap.insert(x, x)
+    }
+
+    val clone = PairingHeap.clone(heap)
+    assert(clone.size() == heap.size())
+
+    while (heap.size() > 5) {
+        assert(heap.pop() == clone.pop())
+        assert(heap.size() == clone.size())
+    }
+
+    heap.clear()
+    clone.clear()
+    assert(heap.isEmpty)
+    assert(clone.isEmpty)
+}
+
+fun hashTableUnitTest () {
+    val table = HashTable<Int, Int>()
+    assert(table.isEmpty)
+
+    table.put(6, 6)
+    table.put(2, 2)
+    table.put(13, 13)
+    table.put(4, 4)
+
+    assert(table.size() == 4)
+    assert(table.get(2) == 2)
+    table.put(2, 69)
+    assert(table.get(2) == 69)
+    assert(table.size() == 4)
+    assert(table.get(1) == null)
+
+    // hash collision with 2
+    table.put(14, 14)
+    table.put(24, 24)
+    assert(table.size() == 6)
+
+    assert(table.remove(2) == 69)
+    assert(table.size() == 5)
+
+    assert(table.remove(24) == 24)
+    assert(table.remove(24) == null)
+
+    table.clear()
+    assert(table.isEmpty)
+
+    for (i in 0..10000) {
+        val x = Random.nextInt(10000)
+        table.put(x, x)
+    }
+
+    var x = 0
+    for (key in table.keys()) {
+        assert(key != null)
+        assert(table.get(key) == key)
+        x++
+    }
+    assert(x == table.size())
+
+    x = 0
+    for (value in table.values()) {
+        assert(value != null)
+        x++
+    }
+    assert(x == table.size())
+
+    table.clear()
+}
+
 fun main () {
     // Structures
     stackUnitTest()
     linkedListUnitTest()
-    queueUnitTests()
-    binaryTreeUnitTests()
-
-    PairingHeapTest.unitTests()
-    HashTableTest.unitTests()
+    queueUnitTest()
+    binaryTreeUnitTest()
+    pairingHeapUnitTest()
+    hashTableUnitTest()
 
     println("Unit tests passed")
 }
