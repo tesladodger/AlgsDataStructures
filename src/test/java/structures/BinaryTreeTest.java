@@ -10,74 +10,6 @@ import java.util.Random;
 
 public class BinaryTreeTest {
 
-    public static void unitTests () {
-        BinaryTree<Integer, Integer> tree = new BinaryTree<>();
-        assert tree.isEmpty();
-        assert tree.size() == 0;
-
-        Random ran = new Random();
-        int i = 0;
-        while (i++ < 1000000) {
-            int x = ran.nextInt(1000000);
-            tree.insert(x, x);
-        }
-
-        assert !tree.isEmpty();
-
-        // Assert order of traversal (and of iterator, which uses traversal)
-        int min = tree.findMin();
-        int prev = tree.popMin();
-        assert min == prev;
-        for (Integer integer : tree) {
-            assert integer > prev;
-            prev = integer;
-        }
-        assert prev == tree.findMax();
-        int max = tree.popMax();
-        assert max == prev;
-
-        // Test random deletions
-        i = 0;
-        while (i++ < 5000) {
-            int size = tree.size();
-            int x = ran.nextInt(1000000);
-            if (tree.containsKey(x)) {
-                tree.remove(x);
-                assert tree.size() == size - 1;
-            }
-        }
-
-        // assert order after deletions
-        min = tree.findMin();
-        prev = tree.popMin();
-        assert min == prev;
-        for (Integer integer : tree) {
-            assert integer > prev;
-            prev = integer;
-        }
-        assert prev == tree.findMax();
-        max = tree.popMax();
-        assert max == prev;
-
-        tree.clear();
-        assert tree.isEmpty();
-        assert tree.size() == 0;
-
-        tree.insert(5, 5);
-        tree.insert(9, 9);
-        tree.insert(2, 2);
-
-        min = tree.popMin();
-        assert min == 2;
-        min = tree.popMin();
-        assert min == 5;
-        min = tree.popMin();
-        assert min == 9;
-
-        assert tree.isEmpty();
-        assert tree.size() == 0;
-    }
-
     public static void main (String[] args) {
 
         BinaryTree<Integer, Integer> tree = new BinaryTree<>();
@@ -185,8 +117,6 @@ public class BinaryTreeTest {
         System.out.println(tree.find(69));
 
         tree.clear();
-
-        /**/
 
     }
 

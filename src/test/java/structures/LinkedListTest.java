@@ -32,6 +32,7 @@ public class LinkedListTest {
         for (Integer i : list) {
             System.out.println(i);
         }
+
     }
 
 }
