@@ -26,9 +26,7 @@ public class SortTest {
         int[] unsortedArray = new int[bound];
         int i = 0;
         while (i < bound) {
-            int please = ran.nextInt(bound * 10);
-            unsortedArray[i] = please;
-            i++;
+            unsortedArray[i++] = ran.nextInt(bound);
         }
 
         int[] copy = new int[bound];
@@ -121,29 +119,6 @@ public class SortTest {
         verifyOrder(copy);
         System.out.printf("The list was sorted in %s milliseconds.\n", t);/**/
 
-
-        // -------------------------------------------------------------------- Heap //
-        /*
-        System.out.println("\nHeap");
-        System.arraycopy(unsortedArray, 0, copy, 0, bound);
-        t = System.currentTimeMillis();
-        HeapSort.sort(copy);
-        t = System.currentTimeMillis() - t;
-
-        verifyOrder(copy);
-        System.out.printf("The list was sorted in %s milliseconds.\n", t);
-
-
-        // -------------------------------------------------------------------- Heap //
-        System.out.println("\nHeap 2");
-        System.arraycopy(unsortedArray, 0, copy, 0, bound);
-        t = System.currentTimeMillis();
-        HeapSort.sort(copy);
-        t = System.currentTimeMillis() - t;
-
-        verifyOrder(copy);
-        System.out.printf("The list was sorted in %s milliseconds.\n", t);
-         */
     }
 
 }

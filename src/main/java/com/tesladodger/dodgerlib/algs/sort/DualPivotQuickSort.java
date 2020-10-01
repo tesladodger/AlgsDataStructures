@@ -16,6 +16,7 @@ public class DualPivotQuickSort {
 
     /**
      * Sorts an array of ints.
+     *
      * @param array being sorted;
      */
     public static void sort (int[] array) {
@@ -25,6 +26,7 @@ public class DualPivotQuickSort {
 
     /**
      * Pretty much a simpler version of the algorithm in the JDK.
+     *
      * @param array being sorted;
      * @param low index;
      * @param high index;
@@ -69,10 +71,8 @@ public class DualPivotQuickSort {
             int aK = array[K];
             if (aK < pivot1) {
                 array[K] = array[L];
-                array[L] = aK;
-                ++L;
-            }
-            else if (aK > pivot2) {
+                array[L++] = aK;
+            } else if (aK > pivot2) {
                 // Since we don't know what's on this part, whe should skip the elements greater
                 // than the second pivot.
                 while (array[G] > pivot2) {
@@ -82,10 +82,8 @@ public class DualPivotQuickSort {
                 // Put array[G] in the right partition.
                 if (array[G] < pivot1) {
                     array[K] = array[L];
-                    array[L] = array[G];
-                    ++L;
-                }
-                else array[K] = array[G];
+                    array[L++] = array[G];
+                } else array[K] = array[G];
 
                 // Put aK in the right place.
                 array[G] = aK;
@@ -103,6 +101,7 @@ public class DualPivotQuickSort {
 
     /**
      * Normal insertion sort, called on the left part in order to not go out of bounds.
+     *
      * @param array being sorted;
      * @param low index;
      * @param high index;
@@ -122,6 +121,7 @@ public class DualPivotQuickSort {
 
     /**
      * Pair insertion sort I shamelessly copied from JDK 8.
+     *
      * @param array being sorted;
      * @param low index;
      * @param high index;
@@ -149,6 +149,7 @@ public class DualPivotQuickSort {
 
     /**
      * A very ugly insertion sort for the 5 elements.
+     *
      * @param array being sorted;
      * @param left index;
      * @param p1 index of the first pivot;
