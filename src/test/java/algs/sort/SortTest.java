@@ -104,10 +104,7 @@ public class SortTest {
         System.out.println("\nMultiThreaded");
         System.arraycopy(unsortedArray, 0, copy, 0, bound);
         t = System.currentTimeMillis();
-
-        MultiThreadSort multiThreadSort = new MultiThreadSort(copy);
-        multiThreadSort.sort();
-
+        MultiThreadSort.sort(copy);
         t = System.currentTimeMillis() - t;
 
         verifyOrder(copy);
@@ -118,10 +115,7 @@ public class SortTest {
         System.out.println("\nMultiThreaded 2");
         System.arraycopy(unsortedArray, 0, copy, 0, bound);
         t = System.currentTimeMillis();
-
-        MultiThreadSort multiThreadSort2 = new MultiThreadSort(copy);
-        multiThreadSort2.sort();
-
+        MultiThreadSort.sort(copy);
         t = System.currentTimeMillis() - t;
 
         verifyOrder(copy);
