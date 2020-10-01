@@ -1,5 +1,7 @@
 package com.tesladodger.dodgerlib.structures;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -14,13 +16,19 @@ import java.util.NoSuchElementException;
  */
 abstract class AbstractTree<K extends Comparable<K>, V> implements Iterable <V> {
 
-    class Node {
+    /**
+     * Class that holds an element of the tree.
+     *
+     * @param <K> key type;
+     * @param <V> value type;
+     */
+    static class Node<K, V> {
         K key;
         V value;
 
-        Node parent = null;
-        Node left = null;
-        Node right = null;
+        Node<K, V> parent = null;
+        Node<K, V> left = null;
+        Node<K, V> right = null;
 
         Node (K key, V value) {
             this.key = key;
@@ -28,17 +36,14 @@ abstract class AbstractTree<K extends Comparable<K>, V> implements Iterable <V> 
         }
     }
 
-    Node root;
+    /** Entry point to the tree. */
+    Node<K, V> root;
 
-    /* Counter for number of elements in the tree. */
-    int counter;
+    /** Number of elements in the tree. */
+    int size;
 
-    @Override
-    public Iterator<V> iterator () {
-        return new TreeIterator<>(this.traverse());
-    }
 
-    // ------------------------------------------------------------------------ Search methods //
+
     /**
      * Public method that calls the iterative search method.
      *
@@ -59,8 +64,8 @@ abstract class AbstractTree<K extends Comparable<K>, V> implements Iterable <V> 
      *
      * @return node to be found;
      */
-     Node findIteratively (K key) {
-        Node current = root;
+     Node<K, V> findIteratively (K key) {
+        Node<K, V> current = root;
         while (current != null) {
             if (key.compareTo(current.key) < 0) {
                 current = current.left;
@@ -95,7 +100,7 @@ abstract class AbstractTree<K extends Comparable<K>, V> implements Iterable <V> 
      *
      * @return left-most node;
      */
-    Node getMin (Node current) {
+    Node<K, V> getMin (Node<K, V> current) {
         while (current.left != null) current = current.left;
         return current;
     }
@@ -107,7 +112,7 @@ abstract class AbstractTree<K extends Comparable<K>, V> implements Iterable <V> 
      *
      * @return right-most node;
      */
-    Node getMax (Node current) {
+    Node<K, V> getMax (Node<K, V> current) {
         while (current.right != null) current = current.right;
         return current;
     }
@@ -122,8 +127,6 @@ abstract class AbstractTree<K extends Comparable<K>, V> implements Iterable <V> 
         return getMax(root).value;
     }
 
-
-    // ------------------------------------------------------------------------ Traverse methods //
     /**
      * Calls the recursive traverse method.
      *
@@ -144,7 +147,7 @@ abstract class AbstractTree<K extends Comparable<K>, V> implements Iterable <V> 
      *
      * @return sorted list;
      */
-    private List<V> traverseRecursively (Node current, List<V> sorted) {
+    private List<V> traverseRecursively (Node<K, V> current, List<V> sorted) {
         if (current != null) {
             traverseRecursively(current.left, sorted);
             sorted.add(current.value);
@@ -153,10 +156,48 @@ abstract class AbstractTree<K extends Comparable<K>, V> implements Iterable <V> 
         return sorted;
     }
 
+    /**
+     * Provide an iterator for the structure.
+     *
+     * @return TreeIterator;
+     */
+    @NotNull
+    @Override
+    public Iterator<V> iterator () {
+        return new TreeIterator<>(this.traverse());
+    }
+
+    /**
+     * Iterator for the tree.
+     *
+     * @param <V>
+     */
+    static class TreeIterator<V> implements Iterator<V> {
+
+        private final List<V> list;
+        private int current;
+
+        public TreeIterator (List<V> list) {
+            this.list = list;
+            current = 0;
+        }
+
+        @Override
+        public boolean hasNext () {
+            return current < list.size();
+        }
+
+        @Override
+        public V next () {
+            V data = list.get(current);
+            current++;
+            return data;
+        }
+    }
 
     public void clear () {
         root = null;
-        counter = 0;
+        size = 0;
     }
 
     public boolean isEmpty () {
@@ -164,30 +205,7 @@ abstract class AbstractTree<K extends Comparable<K>, V> implements Iterable <V> 
     }
 
     public int size () {
-        return counter;
+        return size;
     }
 
-}
-
-class TreeIterator<V> implements Iterator<V> {
-
-    private final List<V> list;
-    private int current;
-
-    public TreeIterator (List<V> list) {
-        this.list = list;
-        current = 0;
-    }
-
-    @Override
-    public boolean hasNext() {
-        return current < list.size();
-    }
-
-    @Override
-    public V next() {
-        V data = list.get(current);
-        current++;
-        return data;
-    }
 }

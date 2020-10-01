@@ -5,6 +5,7 @@ import java.util.NoSuchElementException;
 
 /**
  * Since java is deprecating the stack, I made my own.
+ *
  * @param <E>
  */
 public class Stack<E> extends AbstractLinearStructure<E> {
@@ -17,18 +18,19 @@ public class Stack<E> extends AbstractLinearStructure<E> {
         root = null;
     }
 
-
     /**
      * Insert new element.
+     *
      * @param data of the element;
      */
     public void push (E data) {
-        root = new Node(root, data);
+        root = new Node<>(root, data);
         size++;
     }
 
     /**
      * Remove the root.
+     *
      * @return the value of the root;
      */
     public E pop () {

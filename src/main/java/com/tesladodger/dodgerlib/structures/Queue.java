@@ -5,6 +5,7 @@ import java.util.NoSuchElementException;
 
 /**
  * Singly linked fifo queue of generic elements.
+ *
  * @param <E>
  */
 public class Queue<E> extends AbstractLinearStructure<E> {
@@ -19,15 +20,15 @@ public class Queue<E> extends AbstractLinearStructure<E> {
     }
 
     /* Reference to the last node */
-    private Node tail;
-
+    private Node<E> tail;
 
     /**
      * Append a new element to the end of the queue.
+     *
      * @param data to add;
      */
     public void enqueue (E data) {
-        Node n = new Node(null, data);
+        Node<E> n = new Node<>(null, data);
         if (isEmpty()) {
             root = n;
         }
@@ -40,6 +41,7 @@ public class Queue<E> extends AbstractLinearStructure<E> {
 
     /**
      * Remove the first element in the queue.
+     *
      * @return the value of that element;
      */
     public E dequeue () {

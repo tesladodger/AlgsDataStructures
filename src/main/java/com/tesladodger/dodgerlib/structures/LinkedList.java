@@ -15,41 +15,44 @@ public class LinkedList<E> extends AbstractLinearStructure<E> {
         size = 0;
     }
 
-
     /**
      * Adds a new element to the end of the list.
+     *
      * @param data to add;
      */
     public void add (E data) {
-        Node current = root;
+        Node<E> current = root;
         if (current == null) {
-            root = new Node(null, data);
+            root = new Node<>(null, data);
         } else {
             while (current.next != null) {
                 current = current.next;
             }
-            current.next = new Node(null, data);
+            current.next = new Node<>(null, data);
         }
         size++;
     }
 
     /**
      * Add a new element to the start of the list.
+     *
      * @param data to add;
      */
     public void addFirst (E data) {
-        root = new Node(root, data);
+        root = new Node<>(root, data);
         size++;
     }
 
     /**
      * Returns the value of the element at the specified index.
+     *
      * @param index wanted;
+     *
      * @return the value at that index;
      */
     public E get (int index) {
         if (index < 0 || index >= size) throw new IndexOutOfBoundsException();
-        Node current = root;
+        Node<E> current = root;
         for (int i = 0; i < index; i++) {
             current = current.next;
         }
@@ -58,7 +61,9 @@ public class LinkedList<E> extends AbstractLinearStructure<E> {
 
     /**
      * Removes the node at the specified index.
+     *
      * @param index to remove;
+     *
      * @return the value of the removed index;
      */
     public E remove (int index) {
@@ -71,7 +76,7 @@ public class LinkedList<E> extends AbstractLinearStructure<E> {
             result = root.data;
             root = root.next;
         } else {
-            Node parent = root;
+            Node<E> parent = root;
             for (int i = 0; i < index - 1; i++) {
                 parent = parent.next;
             }

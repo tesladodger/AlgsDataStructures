@@ -19,11 +19,9 @@ public class BinaryTree<K extends Comparable<K>, V> extends AbstractTree<K, V> {
 
     public BinaryTree () {
         root = null;
-        counter = 0;
+        size = 0;
     }
 
-
-    // ---------------------------------------------------- Insert //
     /**
      * Public method to call the recursive insertion method.
      * If this tree is empty, create the root.
@@ -33,13 +31,13 @@ public class BinaryTree<K extends Comparable<K>, V> extends AbstractTree<K, V> {
      */
     public void insert (K key, V value) {
         if (isEmpty()) {
-            root = new Node(key, value);
+            root = new Node<>(key, value);
             root.parent = null;
         }
         else {
             insertIteratively(key, value);
         }
-        counter++;
+        size++;
     }
 
     /**
@@ -49,12 +47,12 @@ public class BinaryTree<K extends Comparable<K>, V> extends AbstractTree<K, V> {
      * @param value new value;
      */
     private void insertIteratively (K key, V value) {
-        Node current = root;
+        Node<K, V> current = root;
 
         while (true) {
             if (key.compareTo(current.key) < 0) {
                 if (current.left == null) {
-                    current.left = new Node(key, value);
+                    current.left = new Node<>(key, value);
                     current.left.parent = current;
                     break;
                 }
@@ -62,7 +60,7 @@ public class BinaryTree<K extends Comparable<K>, V> extends AbstractTree<K, V> {
             }
             else if (key.compareTo(current.key) > 0) {
                 if (current.right == null) {
-                    current.right = new Node(key, value);
+                    current.right = new Node<>(key, value);
                     current.right.parent = current;
                     break;
                 }
@@ -70,14 +68,13 @@ public class BinaryTree<K extends Comparable<K>, V> extends AbstractTree<K, V> {
             }
             else {
                 current.value = value;
-                counter--;
+                size--;
                 break;
             }
         }
 
     }
 
-    // ---------------------------------------------------- Remove //
     /**
      * Removes a node and returns its data.
      *
@@ -89,7 +86,7 @@ public class BinaryTree<K extends Comparable<K>, V> extends AbstractTree<K, V> {
         V result;
         if (isEmpty()) throw new NoSuchElementException("The tree is empty.");
         // Find the node to delete.
-        Node D = findIteratively(key);
+        Node<K, V> D = findIteratively(key);
         // If either left or right are null, replace D with the other, which may be null.
         if (D.left == null) {
             result = D.value;
@@ -103,7 +100,7 @@ public class BinaryTree<K extends Comparable<K>, V> extends AbstractTree<K, V> {
         else {
             result = D.value;
             // Find in-order successor.
-            Node E = getMin(D.right);
+            Node<K, V> E = getMin(D.right);
             // If D's successor is it's right child. Wikipedia's algorithm fails in this case.
             if (E == D.right) {
                 // Replace D's data with E's.
@@ -129,7 +126,7 @@ public class BinaryTree<K extends Comparable<K>, V> extends AbstractTree<K, V> {
                 D.key = E.key;
             }
         }
-        counter--;
+        size--;
         return result;
     }
 
@@ -139,7 +136,7 @@ public class BinaryTree<K extends Comparable<K>, V> extends AbstractTree<K, V> {
      * @param D node being deleted;
      * @param replacement node to replace D's place in the parent;
      */
-    private void replaceNodeInParent (Node D, Node replacement) {
+    private void replaceNodeInParent (Node<K, V> D, Node<K, V> replacement) {
         if (D.parent != null) {
             if (D.parent.left == D) {
                 D.parent.left = replacement;
@@ -167,7 +164,7 @@ public class BinaryTree<K extends Comparable<K>, V> extends AbstractTree<K, V> {
      */
     public V popMin () {
         if (isEmpty()) throw new NoSuchElementException("The tree is empty.");
-        Node min = getMin(root);
+        Node<K, V> min = getMin(root);
         V toRet = min.value;
         remove(min.key);
         return toRet;
@@ -180,11 +177,10 @@ public class BinaryTree<K extends Comparable<K>, V> extends AbstractTree<K, V> {
      */
     public V popMax () {
         if (isEmpty()) throw new NoSuchElementException("The tree is empty.");
-        Node max = getMax(root);
+        Node<K, V> max = getMax(root);
         V toRet = max.value;
         remove(max.key);
         return toRet;
     }
-
 
 }

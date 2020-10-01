@@ -1,32 +1,32 @@
 package com.tesladodger.dodgerlib.structures;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Iterator;
 
 
 public abstract class AbstractLinearStructure<E> implements Iterable<E> {
 
-    class Node {
-        Node next;
+    /**
+     * Class that holds an element of the list.
+     *
+     * @param <E> data type param;
+     */
+    static final class Node<E> {
+        Node<E> next;
         E data;
 
-        Node (Node next, E data) {
+        Node (Node<E> next, E data) {
             this.next = next;
             this.data = data;
         }
     }
 
-    Node root;
-    int size;
+    /** Entry point to the structure */
+    Node<E> root;
 
-    /**
-     * Provide an iterator for the structure.
-     *
-     * @return LinearStructureIterator for the list;
-     */
-    @Override
-    public Iterator<E> iterator () {
-        return new LinearStructureIterator<>(this);
-    }
+    /** Number of elements in the structure */
+    int size;
 
     /**
      * Data from the root of the structure.
@@ -39,11 +39,13 @@ public abstract class AbstractLinearStructure<E> implements Iterable<E> {
 
     /**
      * Iteratively search for the data.
+     *
      * @param data to find;
+     *
      * @return boolean;
      */
     public boolean contains (E data) {
-        Node next = root;
+        Node<E> next = root;
         while (next != null) {
             if (next.data == data) {
                 return true;
@@ -51,6 +53,43 @@ public abstract class AbstractLinearStructure<E> implements Iterable<E> {
             next = next.next; // nice.
         }
         return false;
+    }
+
+    /**
+     * Provide an iterator for the structure.
+     *
+     * @return LinearStructureIterator for the list;
+     */
+    @NotNull
+    @Override
+    public Iterator<E> iterator () {
+        return new LinearStructureIterator<>(this);
+    }
+
+    /**
+     * Iterator for the structure.
+     *
+     * @param <E>
+     */
+    static class LinearStructureIterator<E> implements Iterator<E> {
+
+        private Node<E> current;
+
+        public LinearStructureIterator (AbstractLinearStructure<E> structure) {
+            current = structure.root;
+        }
+
+        @Override
+        public boolean hasNext () {
+            return current != null;
+        }
+
+        @Override
+        public E next () {
+            E data = current.data;
+            current = current.next;
+            return data;
+        }
     }
 
     public int size () {
@@ -61,25 +100,4 @@ public abstract class AbstractLinearStructure<E> implements Iterable<E> {
         return root == null;
     }
 
-}
-
-class LinearStructureIterator<E> implements Iterator<E> {
-
-    private AbstractLinearStructure<E>.Node current;
-
-    public LinearStructureIterator (AbstractLinearStructure<E> structure) {
-        current = structure.root;
-    }
-
-    @Override
-    public boolean hasNext() {
-        return current != null;
-    }
-
-    @Override
-    public E next() {
-        E data = current.data;
-        current = current.next;
-        return data;
-    }
 }

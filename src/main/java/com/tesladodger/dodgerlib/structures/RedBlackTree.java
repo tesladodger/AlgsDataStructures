@@ -1,19 +1,18 @@
 package com.tesladodger.dodgerlib.structures;
 
-import java.util.NoSuchElementException;
-
 // todo deletion
 
 /**
  * Self balancing Red-Black Tree.
- * @param <K> key;
- * @param <V> value;
+ *
+ * @param <K> key type;
+ * @param <V> value type;
  */
 public class RedBlackTree<K extends Comparable<K>, V> extends AbstractTree<K, V>{
 
     private enum Color {RED, BLACK}
 
-    private class RBNode extends Node {
+    private static final class RBNode<K, V> extends Node<K, V> {
         Color color;
 
         RBNode (K key, V value) {
@@ -24,13 +23,12 @@ public class RedBlackTree<K extends Comparable<K>, V> extends AbstractTree<K, V>
 
     public RedBlackTree () {
         root = null;
-        counter = 0;
+        size = 0;
     }
 
-
-    // ---------------------------------------------------- Insertion //
     /**
      * Creates a new red node, calls the iterative insertion method.
+     *
      * @param key new key;
      * @param value new value;
      */
@@ -38,28 +36,29 @@ public class RedBlackTree<K extends Comparable<K>, V> extends AbstractTree<K, V>
         if (key == null) throw new IllegalArgumentException("New key cannot be null.");
 
         // Create new node and color it red.
-        RBNode n = new RBNode(key, value);
+        RBNode<K, V> n = new RBNode<>(key, value);
 
         // If new node is the root, make it so.
         if (isEmpty()) {
             root = n;
-            ((RBNode)root).color = Color.BLACK;
+            ((RBNode<K, V>) root).color = Color.BLACK;
         }
         // Otherwise, insert it and repair the tree.
         else {
             insertIteratively(n);
         }
 
-        counter++;
+        size++;
     }
 
     /**
      * Iteratively inserts a node in the same way a binary tree does. If a new node is created,
      * calls the repair method on that node.
+     *
      * @param n new node;
      */
-    private void insertIteratively (RBNode n) {
-        RBNode current = (RBNode) root;
+    private void insertIteratively (RBNode<K, V> n) {
+        RBNode<K, V> current = (RBNode<K, V>) root;
         // Traverse the tree until a null node is found.
         while (true) {
             if (n.key.compareTo(current.key) < 0) {
@@ -69,7 +68,7 @@ public class RedBlackTree<K extends Comparable<K>, V> extends AbstractTree<K, V>
                     insertRepair(n);
                     break;
                 }
-                current = (RBNode) current.left;
+                current = (RBNode<K, V>) current.left;
             }
             else if (n.key.compareTo(current.key) > 0) {
                 if (current.right == null) {
@@ -78,12 +77,12 @@ public class RedBlackTree<K extends Comparable<K>, V> extends AbstractTree<K, V>
                     insertRepair(n);
                     break;
                 }
-                current = (RBNode) current.right;
+                current = (RBNode<K, V>) current.right;
             }
             else {
                 // Key is already present, just update the value.
                 current.value = n.value;
-                counter--;
+                size--;
                 break;
             }
         }
@@ -91,11 +90,12 @@ public class RedBlackTree<K extends Comparable<K>, V> extends AbstractTree<K, V>
 
     /**
      * Restores balance after the insertion of a node. Can be recursive.
+     *
      * @param n newly inserted node or current node.
      */
-    private void insertRepair (RBNode n) {
-        RBNode p = (RBNode) parent(n);
-        RBNode g = (RBNode) grandParent(n);
+    private void insertRepair (RBNode<K, V> n) {
+        RBNode<K, V> p = parent(n);
+        RBNode<K, V> g = grandParent(n);
         while (n != root && p.color == Color.RED) {
             // There's no danger of NullPointerException:
             // If p is the root, its color is black, so the loop is never entered.
@@ -103,7 +103,7 @@ public class RedBlackTree<K extends Comparable<K>, V> extends AbstractTree<K, V>
             // noinspection ConstantConditions
             if (p == g.left) {
                 // ^ uncle is on the right (can be null).
-                RBNode u = (RBNode) uncle(n);
+                RBNode<K, V> u = uncle(n);
                 // Uncle is red.
                 if (u != null && (u).color == Color.RED) {
                     p.color = Color.BLACK;
@@ -126,7 +126,7 @@ public class RedBlackTree<K extends Comparable<K>, V> extends AbstractTree<K, V>
             }
             else if (p == g.right) {
                 // ^ uncle is on the left (can be null).
-                RBNode u = (RBNode) uncle(n);
+                RBNode<K, V> u = uncle(n);
                 // Uncle is red.
                 if (u != null && u.color == Color.RED) {
                     p.color = Color.BLACK;
@@ -149,11 +149,9 @@ public class RedBlackTree<K extends Comparable<K>, V> extends AbstractTree<K, V>
             }
         }
         // Fix the color of the root.
-        ((RBNode)root).color = Color.BLACK;
+        ((RBNode<K, V>)root).color = Color.BLACK;
     }
 
-
-    // ---------------------------------------------------- Removal //
     /*public V remove (K key) {
         if (isEmpty()) throw new NoSuchElementException("The tree is empty.");
         // Find the node to delete.
@@ -231,36 +229,33 @@ public class RedBlackTree<K extends Comparable<K>, V> extends AbstractTree<K, V>
         }
     }*/
 
-
-    // ---------------------------------------------------- Helper methods //
-    private Node parent (Node n) {
-        return n.parent;
+    private RBNode<K, V> parent (RBNode<K, V> n) {
+        return (RBNode<K, V>) n.parent;
     }
 
-    private Node grandParent (Node n) {
-        Node p = parent(n);
+    private RBNode<K, V> grandParent (RBNode<K, V> n) {
+        RBNode<K, V> p = parent(n);
         if (p == null) {
             return null;
         }
-        return p.parent;
+        return (RBNode<K, V>) p.parent;
     }
 
-    private Node sibling (Node n) {
-        Node p = parent(n);
+    private RBNode<K, V> sibling (RBNode<K, V> n) {
+        RBNode<K, V> p = parent(n);
         if (p == null) return null;
-        if (p.right == n) return p.left;
-        else return p.right;
+        return (RBNode<K, V>) (p.right == n ? p.left : p.right);
     }
 
-    private Node uncle (Node n) {
-        Node p = parent(n);
-        Node g = grandParent(n);
+    private RBNode<K, V> uncle (RBNode<K, V> n) {
+        RBNode<K, V> p = parent(n);
+        RBNode<K, V> g = grandParent(n);
         if (g == null) return null;
         return sibling(p);
     }
 
-    private void rotateLeft (Node n) {
-        Node p = parent(n);
+    private void rotateLeft (RBNode<K, V> n) {
+        RBNode<K, V> p = parent(n);
         // Update n's parent to point to n's right (or the root).
         // Update n's right's parent.
         if (p != null) {
@@ -278,7 +273,7 @@ public class RedBlackTree<K extends Comparable<K>, V> extends AbstractTree<K, V>
             n.right.parent = null;
         }
 
-        Node rightLeftSubtree = n.right.left;
+        RBNode<K, V> rightLeftSubtree = (RBNode<K, V>) n.right.left;
 
         // n's new parent is n.right
         n.parent = n.right;
@@ -289,8 +284,8 @@ public class RedBlackTree<K extends Comparable<K>, V> extends AbstractTree<K, V>
         if (n.right != null) n.right.parent = n;
     }
 
-    private void rotateRight (Node n) {
-        Node p = parent(n);
+    private void rotateRight (RBNode<K, V> n) {
+        RBNode<K, V> p = parent(n);
         // Update n's parent to point to n's left (or the root).
         // Update n's left's parent.
         if (p != null) {
@@ -308,7 +303,7 @@ public class RedBlackTree<K extends Comparable<K>, V> extends AbstractTree<K, V>
             n.left.parent = null;
         }
 
-        Node leftRightSubtree = n.left.right;
+        RBNode<K, V> leftRightSubtree = (RBNode<K, V>) n.left.right;
 
         // n's new parent is n.left
         n.parent = n.left;
@@ -321,10 +316,11 @@ public class RedBlackTree<K extends Comparable<K>, V> extends AbstractTree<K, V>
 
     /**
      * When removing a node with only one child, only its parent's pointer must be updated.
+     *
      * @param D node being deleted;
      * @param replacement node to replace D's place in the parent;
      */
-    private void replaceNodeInParent (Node D, Node replacement) {
+    private void replaceNodeInParent (RBNode<K, V> D, RBNode<K, V> replacement) {
         if (D.parent != null) {
             if (D.parent.left == D) {
                 D.parent.left = replacement;
