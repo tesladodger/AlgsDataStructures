@@ -4,11 +4,12 @@ import com.tesladodger.dodgerlib.algs.sort.DualPivotQuickSort
 import com.tesladodger.dodgerlib.algs.sort.MergeSort
 import com.tesladodger.dodgerlib.algs.sort.MultiThreadSort
 import com.tesladodger.dodgerlib.algs.sort.QuickSort
+
 import kotlin.random.Random
 
 fun assertOrder (array: IntArray) {
-    for (i in 0 until array.size-1)
-        assert(array[i] <= array[i+1])
+    for (i in 1 until array.size)
+        assert(array[i] >= array[i-1])
 }
 
 fun sort (array: IntArray, sorter: (array: IntArray) -> Unit) {

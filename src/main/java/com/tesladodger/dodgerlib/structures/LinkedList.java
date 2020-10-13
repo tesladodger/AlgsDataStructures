@@ -1,11 +1,15 @@
 package com.tesladodger.dodgerlib.structures;
 
 
+import java.util.NoSuchElementException;
+
+
 /**
  * Basic methods of a linked list.
+ *
  * @param <E>
  */
-public class LinkedList<E> extends AbstractLinearStructure<E> {
+public class LinkedList<E> extends AbstractLinearStructure<E> implements List<E> {
 
     /**
      * Default constructor.
@@ -25,9 +29,8 @@ public class LinkedList<E> extends AbstractLinearStructure<E> {
         if (current == null) {
             root = new Node<>(null, data);
         } else {
-            while (current.next != null) {
+            while (current.next != null)
                 current = current.next;
-            }
             current.next = new Node<>(null, data);
         }
         size++;
@@ -53,9 +56,8 @@ public class LinkedList<E> extends AbstractLinearStructure<E> {
     public E get (int index) {
         if (index < 0 || index >= size) throw new IndexOutOfBoundsException();
         Node<E> current = root;
-        for (int i = 0; i < index; i++) {
+        for (int i = 0; i < index; i++)
             current = current.next;
-        }
         return current.data;
     }
 
@@ -77,14 +79,28 @@ public class LinkedList<E> extends AbstractLinearStructure<E> {
             root = root.next;
         } else {
             Node<E> parent = root;
-            for (int i = 0; i < index - 1; i++) {
+            for (int i = 0; i < index - 1; i++)
                 parent = parent.next;
-            }
             result = parent.next.data;
             parent.next = parent.next.next;
         }
 
         return result;
+    }
+
+    /**
+     * Set the element in a given index.
+     *
+     * @param index to set;
+     * @param data of the element;
+     */
+    public void set (int index, E data) {
+        if (isEmpty()) throw new NoSuchElementException("The list is empty.");
+        if (index < 0 || index > size - 1) throw new IndexOutOfBoundsException();
+        Node<E> current = root;
+        while (index-- > 0)
+            current = current.next;
+        current.data = data;
     }
 
     /**

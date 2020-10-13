@@ -1,6 +1,6 @@
 package com.tesladodger.dodgerlib.algs.search;
 
-import com.tesladodger.dodgerlib.structures.PairingHeap_old;
+import com.tesladodger.dodgerlib.structures.PairingHeap;
 import com.tesladodger.dodgerlib.structures.Stack;
 
 import java.util.HashSet;
@@ -21,9 +21,12 @@ public class AStar {
         final int x;
         final int y;
 
-        int f;  // g + h
-        int g;  // Distance from start.
-        int h;  // Heuristic distance to goal.
+        /** g + h */
+        int f;
+        /** Distance from start */
+        int g;
+        /** Heuristic distance to goal */
+        int h;
 
         boolean isObstacle;
         boolean isGoal;
@@ -33,6 +36,7 @@ public class AStar {
 
         /**
          * Constructor.
+         *
          * @param x position;
          * @param y position;
          * @param inf = width * height;
@@ -46,7 +50,7 @@ public class AStar {
         }
     }
 
-
+    /** Grid dimensions */
     private final int width;
     private final int height;
     private final int inf;
@@ -60,6 +64,7 @@ public class AStar {
 
     /**
      * Constructor.
+     *
      * @param width of the grid;
      * @param height of the grid;
      */
@@ -73,27 +78,25 @@ public class AStar {
 
     /**
      * Populates the grid and defines the goals.
+     *
      * @param goals array with the IDs of the goals.
      */
     public final void addGoals (int[][] goals) {
-        if (goals == null) throw new NullPointerException("Goals array is null");
+        if (goals == null) throw new IllegalArgumentException("Goals array is null");
 
         // Populate the grid.
-        for (int j = 0; j < height; j++) {
-            for (int i = 0; i < width; i++) {
-                ASNode node = new ASNode(i, j, inf);
-                grid[i][j] = node;
-            }
-        }
+        for (int j = 0; j < height; j++)
+            for (int i = 0; i < width; i++)
+                grid[i][j] = new ASNode(i, j, inf);
 
         this.goals = goals;
-        for (int[] goal : goals) {
+        for (int[] goal : goals)
             grid[goal[0]][goal[1]].isGoal = true;
-        }
     }
 
     /**
      * Define the start node.
+     *
      * @param start node coordinates;
      */
     public final void addStart (int[] start) {
@@ -102,40 +105,39 @@ public class AStar {
 
     /**
      * Define the obstacles.
+     *
      * @param obstacles n*2 array with the coordinates of the obstacles;
      */
     public final void addObstacles (int[][] obstacles) {
-        for (int[] obstacle : obstacles) {
+        for (int[] obstacle : obstacles)
             grid[obstacle[0]][obstacle[1]].isObstacle = true;
-        }
     }
 
     /**
      * Adds the neighbors to the list of a node.
+     *
      * @param node to add neighbors to;
      */
     private void addNeighbors (ASNode node) {
         int x = node.x; int y = node.y;
-        if (x < width - 1) {
+        if (x < width - 1)
             grid[x][y].neighbors.add(grid[x+1][y]);  // Right
-        }
-        if (x > 0) {
+        if (x > 0)
             grid[x][y].neighbors.add(grid[x-1][y]);  // Left
-        }
-        if (y < height - 1) {
+        if (y < height - 1)
             grid[x][y].neighbors.add(grid[x][y+1]);  // Top
-        }
-        if (y > 0) {
+        if (y > 0)
             grid[x][y].neighbors.add(grid[x][y-1]);  // Bottom
-        }
     }
 
     /**
      * Calculates the Manhattan distance.
+     *
      * @param x1 coordinate;
      * @param x2 coordinate;
      * @param y1 coordinate;
      * @param y2 coordinate;
+     *
      * @return distance;
      */
     private int manhattanDist(int x1, int x2, int y1, int y2) {
@@ -144,16 +146,17 @@ public class AStar {
 
     /**
      * Calculates the closest distance to a goal for a given node, the heuristic of that node.
+     *
      * @param node to evaluate;
+     *
      * @return best heuristic for that node;
      */
     private int calculateHeuristic (ASNode node) {
         int heuristic = width * height;
         for (int[] goal : goals) {
             int tempHeu = manhattanDist(goal[0], node.x, goal[1], node.y);
-            if (tempHeu < heuristic) {
+            if (tempHeu < heuristic)
                 heuristic = tempHeu;
-            }
         }
         return heuristic;
     }
@@ -161,7 +164,9 @@ public class AStar {
     /**
      * Method that goes through the cameFrom nodes and reconstructs the path. Since I use a stack,
      * the path is returned in order.
+     *
      * @param current the last node to be evaluated, which is the goal node;
+     *
      * @return a stack of integer arrays, each array has the coordinates of a node. The coordinates
      *      form the path from the start to the goal;
      */
@@ -180,6 +185,7 @@ public class AStar {
 
     /**
      * Main algorithm.
+     *
      * @return stack of coordinates;
      */
     public Stack<Integer[]> algorithm () {
@@ -190,7 +196,7 @@ public class AStar {
 
         // Open and closed sets.
         // The key of the pairing heap is the f score of the node. Lowest f is higher priority.
-        PairingHeap_old<Integer, ASNode> openSet = new PairingHeap_old<>(PairingHeap_old.Type.MIN);
+        PairingHeap<Integer, ASNode> openSet = new PairingHeap<>(PairingHeap.Type.MIN);
         HashSet<ASNode> closedSet = new HashSet<>();
 
         // Add the start node to the openSet.
@@ -202,10 +208,9 @@ public class AStar {
             // Pop node with best score.
             ASNode current = openSet.pop();
 
-            if (current.isGoal) {
-                // Done, let's recreate the path.
+            // Recreate the path when the goal is reached
+            if (current.isGoal)
                 return reconstructPath(current);
-            }
 
             // Add current to the closedSet.
             closedSet.add(current);
@@ -217,17 +222,15 @@ public class AStar {
             for (ASNode neighbor : current.neighbors) {
 
                 // Ignore the neighbors in the closedSet and the obstacles.
-                if (closedSet.contains(neighbor) || neighbor.isObstacle) {
+                if (closedSet.contains(neighbor) || neighbor.isObstacle)
                     continue;
-                }
 
                 // The cost of a move in the grid is always 1.
                 int tentativeGScore = current.g + 1;
 
                 // This path is equal or worse, ignore it.
-                if (tentativeGScore >= neighbor.g) {
+                if (tentativeGScore >= neighbor.g)
                     continue;
-                }
 
                 // If it gets here, this is the best path for this node until now.
                 neighbor.cameFrom = current;
@@ -235,7 +238,7 @@ public class AStar {
                 neighbor.h = calculateHeuristic(neighbor);
                 neighbor.f = neighbor.g + neighbor.h;
 
-                // Insert it in the opesSet anyway because I don't know how to decrease key and it
+                // Insert it in the openSet anyway because I don't know how to decrease key and it
                 // doesn't really matter.
                 openSet.insert(neighbor.f, neighbor);
 
@@ -244,6 +247,6 @@ public class AStar {
 
         // If it gets here, there's no solution...
         return null;
-    } // End of the algorithm method.
+    }
 
 }

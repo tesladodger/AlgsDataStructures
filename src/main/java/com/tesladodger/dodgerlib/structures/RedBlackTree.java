@@ -1,6 +1,7 @@
 package com.tesladodger.dodgerlib.structures;
 
-// todo deletion
+import java.util.NoSuchElementException;
+
 
 /**
  * Self balancing Red-Black Tree.
@@ -10,17 +11,36 @@ package com.tesladodger.dodgerlib.structures;
  */
 public class RedBlackTree<K extends Comparable<K>, V> extends AbstractTree<K, V>{
 
-    private enum Color {RED, BLACK}
-
+    /**
+     * Class that represents a node in the Red-Black tree.
+     *
+     * @param <K>
+     * @param <V>
+     */
     private static final class RBNode<K, V> extends Node<K, V> {
+
+        /** Enum for the node colors */
+        private enum Color {RED, BLACK}
+
+        /** Color of this node */
         Color color;
 
+        /**
+         * Constructor.
+         *
+         * @param key used to organize the tree;
+         * @param value stored in the node;
+         */
         RBNode (K key, V value) {
             super(key, value);
+            // Default color of a new node is red
             this.color = Color.RED;
         }
     }
 
+    /**
+     * Constructor.
+     */
     public RedBlackTree () {
         root = null;
         size = 0;
@@ -35,18 +55,12 @@ public class RedBlackTree<K extends Comparable<K>, V> extends AbstractTree<K, V>
     public void insert (K key, V value) {
         if (key == null) throw new IllegalArgumentException("New key cannot be null.");
 
-        // Create new node and color it red.
         RBNode<K, V> n = new RBNode<>(key, value);
 
-        // If new node is the root, make it so.
-        if (isEmpty()) {
-            root = n;
-            ((RBNode<K, V>) root).color = Color.BLACK;
-        }
-        // Otherwise, insert it and repair the tree.
-        else {
+        if (isEmpty())
+            ((RBNode<K, V>) (root = n)).color = RBNode.Color.BLACK;
+        else
             insertIteratively(n);
-        }
 
         size++;
     }
@@ -96,8 +110,8 @@ public class RedBlackTree<K extends Comparable<K>, V> extends AbstractTree<K, V>
     private void insertRepair (RBNode<K, V> n) {
         RBNode<K, V> p = parent(n);
         RBNode<K, V> g = grandParent(n);
-        while (n != root && p.color == Color.RED) {
-            // There's no danger of NullPointerException:
+        while (n != root && p.color == RBNode.Color.RED) {
+            // There is no danger of NullPointerException:
             // If p is the root, its color is black, so the loop is never entered.
             // Otherwise, n always has a grandparent.
             // noinspection ConstantConditions
@@ -105,10 +119,10 @@ public class RedBlackTree<K extends Comparable<K>, V> extends AbstractTree<K, V>
                 // ^ uncle is on the right (can be null).
                 RBNode<K, V> u = uncle(n);
                 // Uncle is red.
-                if (u != null && (u).color == Color.RED) {
-                    p.color = Color.BLACK;
-                    g.color = Color.RED;
-                    u.color = Color.BLACK;
+                if (u != null && (u).color == RBNode.Color.RED) {
+                    p.color = RBNode.Color.BLACK;
+                    g.color = RBNode.Color.RED;
+                    u.color = RBNode.Color.BLACK;
                     insertRepair(g);
                 }
                 // Uncle is black or null.
@@ -119,8 +133,8 @@ public class RedBlackTree<K extends Comparable<K>, V> extends AbstractTree<K, V>
                     }
                     // Case 2 falls to case 3, line case.
                     rotateRight(g);
-                    n.color = Color.BLACK;
-                    g.color = Color.RED;
+                    n.color = RBNode.Color.BLACK;
+                    g.color = RBNode.Color.RED;
                     break;
                 }
             }
@@ -128,10 +142,10 @@ public class RedBlackTree<K extends Comparable<K>, V> extends AbstractTree<K, V>
                 // ^ uncle is on the left (can be null).
                 RBNode<K, V> u = uncle(n);
                 // Uncle is red.
-                if (u != null && u.color == Color.RED) {
-                    p.color = Color.BLACK;
-                    g.color = Color.RED;
-                    u.color = Color.BLACK;
+                if (u != null && u.color == RBNode.Color.RED) {
+                    p.color = RBNode.Color.BLACK;
+                    g.color = RBNode.Color.RED;
+                    u.color = RBNode.Color.BLACK;
                     insertRepair(g);
                 }
                 // Uncle is black or null.
@@ -142,92 +156,145 @@ public class RedBlackTree<K extends Comparable<K>, V> extends AbstractTree<K, V>
                     }
                     // Case 2 falls to case 3, line case.
                     rotateLeft(g);
-                    n.color = Color.BLACK;
-                    g.color = Color.RED;
+                    n.color = RBNode.Color.BLACK;
+                    g.color = RBNode.Color.RED;
                     break;
                 }
             }
         }
         // Fix the color of the root.
-        ((RBNode<K, V>)root).color = Color.BLACK;
+        ((RBNode<K, V>) root).color = RBNode.Color.BLACK;
     }
 
-    /*public V remove (K key) {
+    /**
+     * Remove an element from the tree.
+     *
+     * @param key of the element to remove;
+     *
+     * @return the data corresponding to the key;
+     */
+    public V remove (K key) {
         if (isEmpty()) throw new NoSuchElementException("The tree is empty.");
-        // Find the node to delete.
-        Node D = findIteratively(key);
-        // Save the value.
-        V toRet = D.value;
-        // Delete it.
+
+        RBNode<K, V> D = (RBNode<K, V>) findIteratively(key);
+        V result = D.value;
         removeNode(D);
-        counter--;
-        return toRet;
+        size--;
+        return result;
     }
 
-    private void removeNode (Node D) {
+    /**
+     * Internal method to delete a node from the tree.
+     * If D (the node to be deleted) has two non-null children, replace its value and key with the
+     * in-order successor's, like a normal binary tree, and delete the node the values were copied
+     * from (which has, at most, one non-null child).
+     * Otherwise,
+     *
+     * @param D node to delete;
+     */
+    private void removeNode (RBNode<K, V> D) {
         // If D has two non-null children, replace D with its in-order successor, like a normal
-        // binary tree, and call this function on the replacement.
+        // binary tree, and delete the replacement (which has, at most, one non-null child).
         if (D.left != null && D.right != null) {
-            Node E = getMin(D.right);
+            RBNode<K, V> E = (RBNode<K, V>) getMin(D.right);
             D.value = E.value;
             D.key = E.key;
             removeNode(E);
-            return;
-        }
-
-        Node C = (D.left == null) ? D.right : D.left;
-        // A red node can only have two null children. In this case we can just delete it.
-        if (D.color == Color.RED) {
-            // Just replace D with C. No need to repaint, C is either null or black.
-            replaceNodeInParent(D, C);
-        }
-        // Cases when D is black.
-        else {
-            // Simple case when C is red: replace D with it and paint it black.
-            if (C != null && C.color == Color.RED) {
-                replaceNodeInParent(D, C);
-                C.color = Color.BLACK;
-                return;
-            }
-            // Where the shitshow begins, black node with black children.
-            else {
-                deleteCase1(D, C);
-            }
-
-            if (S.color == Color.RED) {  // Case 2 (don't return, go to case 3 anyway).
-                D.parent.color = Color.RED;
-                S.color = Color.BLACK;
-                if (D == D.parent.left) {
-                    replaceNodeInParent(D, C);
-                    rotateLeft(D.parent);
-                }
-                else {
-                    replaceNodeInParent(D, C);
-                    rotateRight(D.parent);
-                }
-            }
-            if (D.parent.color == Color.BLACK &&
-                    S.color == Color.BLACK &&
-                    (S.left == null || S.left.color == Color.BLACK) &&
-                    (S.right == null || S.right.color == Color.BLACK)) {
-                S.color = Color.RED;
-
-            }
+        } else {
+            // child can be null if both right and left are null
+            RBNode<K, V> child = (RBNode<K, V>) ((D.right == null) ? D.left : D.right);
+            replaceNode(D, child);
+            if (D.color == RBNode.Color.BLACK && child != null)
+                if (child.color == RBNode.Color.RED)
+                    child.color = RBNode.Color.BLACK;
+                else
+                    deleteCase1(child);
         }
     }
 
-    private void deleteCase1 (Node D, Node C) {
-        if (D == root) replaceNodeInParent(D, C);
-        else deleteCase2(D, C);
+    private void deleteCase1 (RBNode<K, V> n) {
+        if (n.parent == null)
+            root = n;
+        else
+            deleteCase2(n);
     }
 
-    private void deleteCase2 (Node D, Node C) {
-        Node S = sibling(D);
-        if (S != null && S.color == Color.RED) {
-            D.parent.color = Color.RED;
-            S.color = Color.BLACK;
+    private void deleteCase2 (RBNode<K, V> n) {
+        RBNode<K, V> s = sibling(n);
+        assert s != null;
+        if (s.color == RBNode.Color.RED) {
+            parent(n).color = RBNode.Color.RED;
+            s.color = RBNode.Color.BLACK;
+            if (n == parent(n).left)
+                rotateLeft(parent(n));
+            else
+                rotateRight(parent(n));
         }
-    }*/
+        deleteCase3(n);
+    }
+
+    private void deleteCase3 (RBNode<K, V> n) {
+        RBNode<K, V> s = sibling(n);
+        assert s != null;
+        if (parent(n).color == RBNode.Color.BLACK &&
+                s.color == RBNode.Color.BLACK &&
+                (s.left == null || ((RBNode<K, V>)s.left).color == RBNode.Color.BLACK) &&
+                (s.right == null || ((RBNode<K, V>)s.right).color == RBNode.Color.BLACK)) {
+            s.color = RBNode.Color.RED;
+            deleteCase1(parent(n));
+        } else {
+            deleteCase4(n);
+        }
+    }
+
+    private void deleteCase4 (RBNode<K, V> n) {
+        RBNode<K, V> s = sibling(n);
+        assert s != null;
+        if (parent(n).color == RBNode.Color.RED &&
+                s.color == RBNode.Color.BLACK &&
+                (s.left == null || ((RBNode<K, V>)s.left).color == RBNode.Color.BLACK) &&
+                (s.right == null || ((RBNode<K, V>)s.right).color == RBNode.Color.BLACK)) {
+            s.color = RBNode.Color.RED;
+            parent(n).color = RBNode.Color.BLACK;
+        } else {
+            deleteCase5(n);
+        }
+    }
+
+    private void deleteCase5 (RBNode<K, V> n) {
+        RBNode<K, V> s = sibling(n);
+        assert s != null;
+        if (s.color == RBNode.Color.BLACK) {
+            if (n == parent(n).left &&
+                    (s.right == null || ((RBNode<K, V>)s.right).color == RBNode.Color.BLACK) &&
+                    ((RBNode<K, V>)s.left).color == RBNode.Color.RED) {
+                s.color = RBNode.Color.RED;
+                ((RBNode<K, V>) s.left).color = RBNode.Color.RED;
+                rotateRight(s);
+            } else if (n == parent(n).right &&
+                    (s.left == null || ((RBNode<K, V>)s.left).color == RBNode.Color.BLACK) &&
+                    ((RBNode<K, V>)s.right).color == RBNode.Color.RED) {
+                s.color = RBNode.Color.RED;
+                ((RBNode<K, V>) s.right).color = RBNode.Color.BLACK;
+                rotateLeft(s);
+            }
+        }
+        deleteCase6(n);
+    }
+
+    private void deleteCase6 (RBNode<K, V> n) {
+        RBNode<K, V> s = sibling(n);
+        assert s != null;
+        s.color = parent(n).color;
+        parent(n).color = RBNode.Color.BLACK;
+        if (n == parent(n).left) {
+            ((RBNode<K, V>)s.right).color = RBNode.Color.BLACK;
+            rotateLeft(parent(n));
+        } else {
+            ((RBNode<K, V>)s.left).color = RBNode.Color.BLACK;
+            rotateRight(parent(n));
+        }
+    }
 
     private RBNode<K, V> parent (RBNode<K, V> n) {
         return (RBNode<K, V>) n.parent;
@@ -235,23 +302,18 @@ public class RedBlackTree<K extends Comparable<K>, V> extends AbstractTree<K, V>
 
     private RBNode<K, V> grandParent (RBNode<K, V> n) {
         RBNode<K, V> p = parent(n);
-        if (p == null) {
-            return null;
-        }
-        return (RBNode<K, V>) p.parent;
+        return p == null ? null : (RBNode<K, V>) p.parent;
     }
 
     private RBNode<K, V> sibling (RBNode<K, V> n) {
         RBNode<K, V> p = parent(n);
-        if (p == null) return null;
-        return (RBNode<K, V>) (p.right == n ? p.left : p.right);
+        return p == null ? null : (RBNode<K, V>) (p.right == n ? p.left : p.right);
     }
 
     private RBNode<K, V> uncle (RBNode<K, V> n) {
         RBNode<K, V> p = parent(n);
         RBNode<K, V> g = grandParent(n);
-        if (g == null) return null;
-        return sibling(p);
+        return g == null ? null : sibling(p);
     }
 
     private void rotateLeft (RBNode<K, V> n) {
@@ -312,33 +374,6 @@ public class RedBlackTree<K extends Comparable<K>, V> extends AbstractTree<K, V>
         // n.left now points to what was on the right of n.left.
         n.left = leftRightSubtree;
         if (n.left != null) n.left.parent = n;
-    }
-
-    /**
-     * When removing a node with only one child, only its parent's pointer must be updated.
-     *
-     * @param D node being deleted;
-     * @param replacement node to replace D's place in the parent;
-     */
-    private void replaceNodeInParent (RBNode<K, V> D, RBNode<K, V> replacement) {
-        if (D.parent != null) {
-            if (D.parent.left == D) {
-                D.parent.left = replacement;
-            }
-            else {
-                D.parent.right = replacement;
-            }
-            if (replacement != null) {
-                replacement.parent = D.parent;
-            }
-        }
-        // Null parent means D was the root.
-        else {
-            root = replacement;
-            if (replacement != null) {
-                replacement.parent = null;
-            }
-        }
     }
 
 }

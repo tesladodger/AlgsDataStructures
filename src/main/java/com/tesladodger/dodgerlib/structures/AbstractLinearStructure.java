@@ -12,7 +12,7 @@ public abstract class AbstractLinearStructure<E> implements Iterable<E> {
      *
      * @param <E> data type param;
      */
-    static final class Node<E> {
+    protected static final class Node<E> {
         Node<E> next;
         E data;
 
@@ -23,10 +23,10 @@ public abstract class AbstractLinearStructure<E> implements Iterable<E> {
     }
 
     /** Entry point to the structure */
-    Node<E> root;
+    protected Node<E> root;
 
     /** Number of elements in the structure */
-    int size;
+    protected int size;
 
     /**
      * Data from the root of the structure.
@@ -71,7 +71,7 @@ public abstract class AbstractLinearStructure<E> implements Iterable<E> {
      *
      * @param <E>
      */
-    static class LinearStructureIterator<E> implements Iterator<E> {
+    protected static class LinearStructureIterator<E> implements Iterator<E> {
 
         private Node<E> current;
 

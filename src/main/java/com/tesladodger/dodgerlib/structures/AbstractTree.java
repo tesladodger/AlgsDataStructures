@@ -22,7 +22,7 @@ abstract class AbstractTree<K extends Comparable<K>, V> implements Iterable <V> 
      * @param <K> key type;
      * @param <V> value type;
      */
-    static class Node<K, V> {
+    protected static class Node<K, V> {
         K key;
         V value;
 
@@ -30,19 +30,17 @@ abstract class AbstractTree<K extends Comparable<K>, V> implements Iterable <V> 
         Node<K, V> left = null;
         Node<K, V> right = null;
 
-        Node (K key, V value) {
+        protected Node (K key, V value) {
             this.key = key;
             this.value = value;
         }
     }
 
     /** Entry point to the tree. */
-    Node<K, V> root;
+    protected Node<K, V> root;
 
     /** Number of elements in the tree. */
-    int size;
-
-
+    protected int size;
 
     /**
      * Public method that calls the iterative search method.
@@ -64,7 +62,7 @@ abstract class AbstractTree<K extends Comparable<K>, V> implements Iterable <V> 
      *
      * @return node to be found;
      */
-     Node<K, V> findIteratively (K key) {
+     protected Node<K, V> findIteratively (K key) {
         Node<K, V> current = root;
         while (current != null) {
             if (key.compareTo(current.key) < 0) {
@@ -100,7 +98,7 @@ abstract class AbstractTree<K extends Comparable<K>, V> implements Iterable <V> 
      *
      * @return left-most node;
      */
-    Node<K, V> getMin (Node<K, V> current) {
+    protected Node<K, V> getMin (Node<K, V> current) {
         while (current.left != null) current = current.left;
         return current;
     }
@@ -112,7 +110,7 @@ abstract class AbstractTree<K extends Comparable<K>, V> implements Iterable <V> 
      *
      * @return right-most node;
      */
-    Node<K, V> getMax (Node<K, V> current) {
+    protected Node<K, V> getMax (Node<K, V> current) {
         while (current.right != null) current = current.right;
         return current;
     }
@@ -157,6 +155,29 @@ abstract class AbstractTree<K extends Comparable<K>, V> implements Iterable <V> 
     }
 
     /**
+     * Replace a node with its child (can be null).
+     *
+     * @param n node being replaced;
+     * @param child node to replace D's place in the parent;
+     */
+    protected void replaceNode (Node<K, V> n, Node<K, V> child) {
+        if (n.parent != null) {
+            if (n.parent.left == n)
+                n.parent.left = child;
+            else
+                n.parent.right = child;
+            if (child != null)
+                child.parent = n.parent;
+        }
+        // Null parent means D was the root.
+        else {
+            root = child;
+            if (child != null)
+                child.parent = null;
+        }
+    }
+
+    /**
      * Provide an iterator for the structure.
      *
      * @return TreeIterator;
@@ -172,7 +193,7 @@ abstract class AbstractTree<K extends Comparable<K>, V> implements Iterable <V> 
      *
      * @param <V>
      */
-    static class TreeIterator<V> implements Iterator<V> {
+    protected static class TreeIterator<V> implements Iterator<V> {
 
         private final List<V> list;
         private int current;

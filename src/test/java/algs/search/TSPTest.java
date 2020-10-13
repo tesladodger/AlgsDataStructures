@@ -4,7 +4,7 @@ import com.tesladodger.dodgerlib.algs.search.BruteForceTSP;
 import com.tesladodger.dodgerlib.algs.search.GeneticAlgTSP;
 import com.tesladodger.dodgerlib.structures.HashTable;
 
-import java.util.List;
+import java.util.ArrayList;
 
 
 public class TSPTest {
@@ -94,7 +94,7 @@ public class TSPTest {
         bruteForceTSP.addNode("Evora", Evora);
 
         long t = System.currentTimeMillis();
-        List<String> solution = bruteForceTSP.solve();
+        ArrayList<String> solution = bruteForceTSP.solve();
         System.out.println("Calculation time: " + (System.currentTimeMillis() - t));
 
         System.out.println("Brute Force solution: \nLisboa");

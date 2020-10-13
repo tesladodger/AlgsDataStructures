@@ -3,13 +3,13 @@ package com.tesladodger.dodgerlib.algs.search;
 import com.tesladodger.dodgerlib.structures.HashTable;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 /**
  * Solves the Traveling Salesman Problem by checking every possibility (brute force).
  * This assumes every node is connected to every other node in the graph.
  * The returned solution does not contain the start/end node.
+ *
  * @param <T>
  */
 public class BruteForceTSP<T extends Comparable<T>> {
@@ -18,9 +18,10 @@ public class BruteForceTSP<T extends Comparable<T>> {
      * Each node is a location in the TSP.
      */
     private class Node {
-        /* ID for lookup in the Hash Table */
+        /** ID for lookup in the Hash Table */
         T ID;
-        /* Table to map the IDs of this node's neighbors to their distance to this node */
+
+        /** Table to map the IDs of this node's neighbors to their distance to this node */
         HashTable<T, Double> edges;
 
         Node (T ID, HashTable<T, Double> edges) {
@@ -29,13 +30,13 @@ public class BruteForceTSP<T extends Comparable<T>> {
         }
     }
 
-    /* Undirected graph. Maps the IDs to the nodes. */
-    private HashTable<T, Node> graph;
+    /** Undirected graph. Maps the IDs to the nodes. */
+    private final HashTable<T, Node> graph;
 
-    /* Ordered list of IDs, representing the current path. */
-    private List<T> list;
+    /** Ordered list of IDs, representing the current path. */
+    private final ArrayList<T> list;
 
-    /* Start and end of the TSP. */
+    /** Start and end of the TSP. */
     private Node start;
 
     /**
@@ -49,6 +50,7 @@ public class BruteForceTSP<T extends Comparable<T>> {
 
     /**
      * Creates the start and end node of the TSP.
+     *
      * @param id of the start;
      * @param edges of the start;
      */
@@ -58,6 +60,7 @@ public class BruteForceTSP<T extends Comparable<T>> {
 
     /**
      * Adds a new node to the graph and the list. The list insertion maintains a sorted state.
+     *
      * @param id of the new node;
      * @param edges of the new node;
      */
@@ -136,6 +139,7 @@ public class BruteForceTSP<T extends Comparable<T>> {
 
     /**
      * Calculates the total distance of the current permutation.
+     *
      * @return distance;
      */
     private double calculateDistance () {
@@ -160,18 +164,18 @@ public class BruteForceTSP<T extends Comparable<T>> {
 
     /**
      * Main method. Checks which permutation has the smallest distance and returns the solution.
+     *
      * @return list with the nodes that constitute the best path, not including the start node;
      */
-    public List<T> solve () {
+    public ArrayList<T> solve () {
         if (start == null) throw new NullPointerException("Start node cannot be null.");
 
         // Number of permutations is the factorial of the size of the list.
         long totalPerms = 1;
-        for (int i = 2; i <= list.size(); i++) {
+        for (int i = 2; i <= list.size(); i++)
             totalPerms *= i;
-        }
 
-        List<T> solution = new ArrayList<>(list);
+        ArrayList<T> solution = new ArrayList<>(list);
         double shortestDistance = calculateDistance();
         // Find the permutation with the shortest distance.
         while (totalPerms > 1) {

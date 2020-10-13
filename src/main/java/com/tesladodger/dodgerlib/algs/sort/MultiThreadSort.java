@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.concurrent.RecursiveAction;
 
 
-public class MultiThreadSort {
+public class MultiThreadSort implements SortingAlgorithm {
 
     private static final int THRESHOLD = 1000;
 

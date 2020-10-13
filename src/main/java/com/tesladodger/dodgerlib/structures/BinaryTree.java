@@ -80,28 +80,24 @@ public class BinaryTree<K extends Comparable<K>, V> extends AbstractTree<K, V> {
      *
      * @param key of the node to delete;
      *
-     * @return data;
+     * @return data represented by the deleted node;
      */
     public V remove (K key) {
         V result;
         if (isEmpty()) throw new NoSuchElementException("The tree is empty.");
         // Find the node to delete.
         Node<K, V> D = findIteratively(key);
+        result = D.value;
         // If either left or right are null, replace D with the other, which may be null.
-        if (D.left == null) {
-            result = D.value;
-            replaceNodeInParent(D, D.right);
-        }
-        else if (D.right == null) {
-            result = D.value;
-            replaceNodeInParent(D, D.left);
-        }
+        if (D.left == null)
+            replaceNode(D, D.right);
+        else if (D.right == null)
+            replaceNode(D, D.left);
         // D's children are both not null.
         else {
-            result = D.value;
             // Find in-order successor.
             Node<K, V> E = getMin(D.right);
-            // If D's successor is it's right child. Wikipedia's algorithm fails in this case.
+            // If D's successor is its right child. Wikipedia's algorithm fails in this case.
             if (E == D.right) {
                 // Replace D's data with E's.
                 D.value = E.value;
@@ -115,7 +111,7 @@ public class BinaryTree<K extends Comparable<K>, V> extends AbstractTree<K, V> {
             }
             // D's successor is further down in its right subtree.
             else {
-                // Replace E's place in it's parent with E's right subtree, which can be null.
+                // Replace E's place in its parent with E's right subtree, which can be null.
                 E.parent.left = E.right;
                 // Update E's right subtree's parent, avoiding null pointer.
                 if (E.right != null) {
@@ -128,33 +124,6 @@ public class BinaryTree<K extends Comparable<K>, V> extends AbstractTree<K, V> {
         }
         size--;
         return result;
-    }
-
-    /**
-     * When removing a node with only one child, only its parent's pointer must be updated.
-     *
-     * @param D node being deleted;
-     * @param replacement node to replace D's place in the parent;
-     */
-    private void replaceNodeInParent (Node<K, V> D, Node<K, V> replacement) {
-        if (D.parent != null) {
-            if (D.parent.left == D) {
-                D.parent.left = replacement;
-            }
-            else {
-                D.parent.right = replacement;
-            }
-            if (replacement != null) {
-                replacement.parent = D.parent;
-            }
-        }
-        // Null parent means D is the root.
-        else {
-            root = replacement;
-            if (replacement != null) {
-                replacement.parent = null;
-            }
-        }
     }
 
     /**

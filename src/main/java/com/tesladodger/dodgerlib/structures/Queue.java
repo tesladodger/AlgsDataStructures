@@ -10,6 +10,9 @@ import java.util.NoSuchElementException;
  */
 public class Queue<E> extends AbstractLinearStructure<E> {
 
+    /** Reference to the last node. */
+    private Node<E> tail;
+
     /**
      * Constructor.
      */
@@ -19,9 +22,6 @@ public class Queue<E> extends AbstractLinearStructure<E> {
         tail = null;
     }
 
-    /* Reference to the last node */
-    private Node<E> tail;
-
     /**
      * Append a new element to the end of the queue.
      *
@@ -29,12 +29,10 @@ public class Queue<E> extends AbstractLinearStructure<E> {
      */
     public void enqueue (E data) {
         Node<E> n = new Node<>(null, data);
-        if (isEmpty()) {
+        if (isEmpty())
             root = n;
-        }
-        else {
+        else
             tail.next = n;
-        }
         tail = n;
         size++;
     }

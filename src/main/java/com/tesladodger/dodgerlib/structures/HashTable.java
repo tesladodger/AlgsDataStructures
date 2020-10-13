@@ -257,7 +257,7 @@ public class HashTable<K, V> {
      * @return hash (int);
      */
     private static <K> int hash (K key, int capacity) {
-        int hash = key.hashCode();
+        int hash = Math.abs(key.hashCode());
         return hash % capacity;
     }
 

@@ -70,7 +70,7 @@ public class MatrixTest {
 
         // Add //
         System.out.println("\nAdd");
-        Matrix.print(Matrix.addition(A, B));
+        Matrix.print(Matrix.add(A, B));
 
 
         // Scalar multiplication //

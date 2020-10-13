@@ -4,7 +4,6 @@ import com.tesladodger.dodgerlib.structures.HashTable;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.Random;
 
 
@@ -16,23 +15,23 @@ import java.util.Random;
  */
 public class GeneticAlgTSP<T extends Comparable<T>> {
 
-    /* Number of elements in a generation. */
-    private static final int populationSize = 50;
+    /** Number of elements in a generation. */
+    private static final int POPULATION_SIZE = 50;
 
-    /* Probability of random mutation. */
+    /** Probability of random mutation. */
     private static final double mutationRate = 0.4d;
 
-    /* Array with the ordered IDs */
-    private List[] population = new ArrayList[populationSize];
+    /** Array with the ordered IDs */
+    private ArrayList<T>[] population = new ArrayList[POPULATION_SIZE];
 
-    /* Contains the fitness of the element in the population with the same index. */
-    private Double[] fitness = new Double[populationSize];
+    /** Contains the fitness of the element in the population with the same index. */
+    private final Double[] fitness = new Double[POPULATION_SIZE];
 
-    /* Counter for number of generations. */
+    /** Counter for number of generations. */
     private int generation;
 
-    /* Random generator used for selection and mutation */
-    private Random ran;
+    /** Random generator used for selection and mutation */
+    private final Random ran;
 
     /**
      * Contains the information of a node.
@@ -49,16 +48,16 @@ public class GeneticAlgTSP<T extends Comparable<T>> {
         }
     }
 
-    /* Undirected graph. Maps the IDs to the nodes for lookup. */
-    private HashTable<T, Node> graph;
+    /** Undirected graph. Maps the IDs to the nodes for lookup. */
+    private final HashTable<T, Node> graph;
 
-    /* Initial list of nodes. */
-    private List<T> list;
+    /** Initial list of nodes. */
+    private final ArrayList<T> list;
 
-    /* Start and end of the TSP. */
+    /** Start and end of the TSP. */
     private Node start;
 
-    /* Shortest distance at a given point in the algorithm. */
+    /** Shortest distance at a given point in the algorithm. */
     private Double currentBest;
 
     /**
@@ -75,6 +74,7 @@ public class GeneticAlgTSP<T extends Comparable<T>> {
 
     /**
      * Creates the start and end node of the TSP.
+     *
      * @param id of the start;
      * @param edges of the start;
      */
@@ -85,6 +85,7 @@ public class GeneticAlgTSP<T extends Comparable<T>> {
 
     /**
      * Adds a new node to the graph and the list.
+     *
      * @param id of the new node;
      * @param edges of the new node;
      */
@@ -97,9 +98,10 @@ public class GeneticAlgTSP<T extends Comparable<T>> {
 
     /**
      * Calculates the total distance of a permutation.
+     *
      * @return distance;
      */
-    private double calculateDistance (List<T> permutation) {
+    private double calculateDistance (ArrayList<T> permutation) {
         //T current = start.ID;
         double distance = start.edges.get(permutation.get(0));
         T current = permutation.get(0);
@@ -127,13 +129,14 @@ public class GeneticAlgTSP<T extends Comparable<T>> {
         for (Double d : fitness) {
             sum += d;
         }
-        for (int i = 0; i < populationSize; i++) {
+        for (int i = 0; i < POPULATION_SIZE; i++) {
             fitness[i] /= sum;
         }
     }
 
     /**
      * Picks an element given the probability distribution.
+     *
      * @return index of the picked element;
      */
     private int randomElement () {
@@ -148,10 +151,12 @@ public class GeneticAlgTSP<T extends Comparable<T>> {
 
     /**
      * Randomly swaps two neighbors, with a probability given by the mutation rate.
+     *
      * @param current permutation being mutated;
+     *
      * @return mutated permutation;
      */
-    private List<T> mutate (List<T> current) {
+    private ArrayList<T> mutate (ArrayList<T> current) {
         if (ran.nextDouble() <= mutationRate) {
             int i = ran.nextInt(current.size());
             int j = (i + 1) % current.size();
@@ -164,34 +169,34 @@ public class GeneticAlgTSP<T extends Comparable<T>> {
 
     /**
      * Takes two lists and applies crossover.
+     *
      * @param a list;
      * @param b list;
+     *
      * @return list formed from the inputs;
      */
-    private List<T> crossover (List<T> a, List<T> b) {
-        List<T> child = new ArrayList<>();
+    private ArrayList<T> crossover (ArrayList<T> a, ArrayList<T> b) {
+        ArrayList<T> child = new ArrayList<>();
         // Add the first half of 'a' to the child.
-        for (int i = 0; i < a.size() / 2; i++) {
+        for (int i = 0; i < a.size() / 2; i++)
             child.add(a.get(i));
-        }
         // Add the elements from 'b' that are not already in the child.
-        for (T elem : b) {
-            if (!child.contains(elem)) {
+        for (T elem : b)
+            if (!child.contains(elem))
                 child.add(elem);
-            }
-        }
         return child;
     }
 
     /**
      * Main method. Creates the first generation randomly and loops the genetic algorithm.
+     *
      * @param solution pre-calculated solution;
+     *
      * @return list with the nodes that constitute the best path, not including the start node;
      */
-    public List<T> solve (List<T> solution) {
-
+    public ArrayList<T> solve (ArrayList<T> solution) {
         // Create the population.
-        for (int i = 0; i < populationSize; i++) {
+        for (int i = 0; i < POPULATION_SIZE; i++) {
             Collections.shuffle(list);
             population[i] = new ArrayList<>(list);
         }
@@ -200,8 +205,7 @@ public class GeneticAlgTSP<T extends Comparable<T>> {
             generation++;
 
             // Rate the generation's fitness and find the current best value.
-            for (int i = 0; i < populationSize; i++) {
-                // noinspection unchecked
+            for (int i = 0; i < POPULATION_SIZE; i++) {
                 double currentDist = calculateDistance(population[i]);
                 if (currentDist < currentBest) {
                     currentBest = currentDist;
@@ -228,7 +232,6 @@ public class GeneticAlgTSP<T extends Comparable<T>> {
 
                     if (solutionFound) {
                         System.out.println("\nSolution found. \nNumber of generations: " + generation);
-                        // noinspection unchecked
                         return population[i];
                     }
                 }
@@ -238,18 +241,17 @@ public class GeneticAlgTSP<T extends Comparable<T>> {
             normalizeFitness();
 
             // Create the next generation.
-            List[] nextGeneration = new List[populationSize];
-            for (int i = 0; i < populationSize; i++) {
+            ArrayList<T>[] nextGeneration = new ArrayList[POPULATION_SIZE];
+            for (int i = 0; i < POPULATION_SIZE; i++) {
                 // Select two 'random' elements, apply crossover, mutate the result and insert it
                 // in the new generation.
-                // noinspection unchecked
                 nextGeneration[i] = mutate(crossover(
                         population[randomElement()],
                         population[randomElement()]
                         ));
             }
             population = nextGeneration;
-        } // End of the while loop.
-    } // End of the solve method.
+        }
+    }
 
 }

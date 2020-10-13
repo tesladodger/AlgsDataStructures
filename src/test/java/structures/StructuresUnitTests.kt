@@ -1,6 +1,7 @@
 package structures
 
 import com.tesladodger.dodgerlib.structures.*
+
 import kotlin.random.Random
 
 fun stackUnitTest () {
@@ -84,6 +85,13 @@ fun linkedListUnitTest () {
 
     list.remove(5)
     assert(!list.contains(6))
+
+    list.set(5, 86)
+    assert(list.get(5) == 86)
+    list.set(0, 124)
+    assert(list.get(0) == 124)
+    list.set(list.size() - 1, 505)
+    assert(list.get(list.size()-1) == 505)
 
     assert(!list.isEmpty)
     list.clear()
@@ -270,4 +278,35 @@ fun hashTableUnitTest () {
     assert(x == table.size())
 
     table.clear()
+}
+
+fun dynamicArrayUnitTest () {
+    val array = DynamicArray<Int>()
+    assert(array.isEmpty)
+
+    for (i in 0..100)
+        array.add(i)
+
+    assert(array.size() == 101)
+
+    for ((x, i) in array.withIndex())
+        assert(x == i)
+
+    array.remove(50)
+    assert(array.size() == 100)
+    assert(array[49] == 49)
+    assert(array[50] == 51)
+    for (i in 51..99)
+        assert(array[i] == i+1)
+
+    array.set(50, 50)
+    assert(array[50] == 50)
+
+    for (i in 0..69)
+        array.remove(0)
+
+    assert(array.size() == 30)
+
+    array.clear()
+    assert(array.isEmpty)
 }
