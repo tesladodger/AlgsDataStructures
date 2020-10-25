@@ -10,6 +10,7 @@ fun main () {
     pairingHeapUnitTest()
     hashTableUnitTest()
     dynamicArrayUnitTest()
+    redBlackTreeUnitTest()
 
     // Sorting algorithms
     sortUnitTest()

@@ -21,33 +21,38 @@ public class HashTable<K, V> {
         V value;
         Node<K, V> next;
 
-        Node (K key, V value, Node<K, V> next) {
+        private Node (K key, V value, Node<K, V> next) {
             this.key = key;
             this.value = value;
             this.next = next;
         }
     }
 
-    /* Size of the array. It's also used as modulo for hashing. */
+    /** Size of the array. It's also used as modulo for hashing. */
     private int capacity;
 
-    /* If number of elements exceeds this percentage of the capacity the array is resized. */
+    /** Default initial capacity. */
+    private static final int DEFAULT_INITIAL_CAPACITY = 11;
+
+    /** If number of elements exceeds this percentage of the capacity the array is resized. */
     private final float FULLNESS_THRESHOLD;
 
-    /* Number of elements in the table. */
+    private static final float DEFAULT_FULLNESS_THRESHOLD = .75f;
+
+    /** Number of elements in the table. */
     private int size;
 
-    /* Array of 'buckets' */
+    /** Array of 'buckets'. */
     private Node<K, V>[] table;
 
-    /* List of prime numbers */
+    /** List of prime numbers. */
     private static final int[] primes = {11, 53, 101, 251, 503, 1009, 1499, 2069, 3001, 4001, 5003};
 
     /**
      * Constructor with default values: capacity of 11 and threshold of 75%.
      */
     public HashTable () {
-        this(11, 0.75f);
+        this(DEFAULT_INITIAL_CAPACITY, DEFAULT_FULLNESS_THRESHOLD);
     }
 
     /**
@@ -56,21 +61,20 @@ public class HashTable<K, V> {
      * @param capacity specified size of the array;
      */
     public HashTable (int capacity) {
-        this(capacity, 0.75f);
+        this(capacity, DEFAULT_FULLNESS_THRESHOLD);
     }
 
     /**
      * Constructor with specified value.
      *
      * @param capacity specified size of the array;
-     * @param FULLNESS_THRESHOLD specified threshold;
+     * @param threshold specified threshold;
      */
-    public HashTable (int capacity, float FULLNESS_THRESHOLD) {
+    @SuppressWarnings("unchecked")
+    public HashTable (int capacity, float threshold) {
         if (capacity < 1) capacity = 1;
         this.capacity = capacity;
-        this.FULLNESS_THRESHOLD = FULLNESS_THRESHOLD;
-
-        // noinspection unchecked
+        this.FULLNESS_THRESHOLD = threshold;
         table = ( Node<K, V>[] ) new Node[capacity];
     }
 
@@ -80,6 +84,8 @@ public class HashTable<K, V> {
      *
      * @param key of the new element;
      * @param value of the new element;
+     *
+     * @throws IllegalArgumentException if the provided key is null;
      */
     public void put (K key, V value) {
         if (key == null) throw new IllegalArgumentException("Key cannot be null");
@@ -99,9 +105,8 @@ public class HashTable<K, V> {
         table[i] = new Node<>(key, value, table[i]);
         size++;
 
-        if (capacity <= 5003 && (float) size / capacity > FULLNESS_THRESHOLD) {
+        if (capacity <= 5003 && (float) size / capacity > FULLNESS_THRESHOLD)
             resize();
-        }
     }
 
     /**
@@ -109,18 +114,19 @@ public class HashTable<K, V> {
      *
      * @param key of that element;
      *
-     * @return value or null;
+     * @return value or null if the element is not present;
+     *
+     * @throws IllegalArgumentException if the provided key is null;
      */
     public V get (K key) {
-        if (key == null) throw new NullPointerException("Key cannot be null");
+        if (key == null) throw new IllegalArgumentException("Key cannot be null");
 
         int i = hash(key, capacity);
 
         Node<K, V> current = table[i];
         while (current != null) {
-            if (current.key.equals(key)) {
+            if (current.key.equals(key))
                 return current.value;
-            }
             current = current.next;
         }
         return null;
@@ -132,9 +138,11 @@ public class HashTable<K, V> {
      * @param key of that element;
      *
      * @return value of the element or null, if the element is not present;
+     *
+     * @throws IllegalArgumentException if the provided key is null;
      */
     public V remove (K key) {
-        if (key == null) throw new NullPointerException("Key cannot be null");
+        if (key == null) throw new IllegalArgumentException("Key cannot be null");
 
         int i = hash(key, capacity);
 
@@ -169,19 +177,19 @@ public class HashTable<K, V> {
         }
 
         // noinspection unchecked
-        Node<K, V>[] newTable = new Node[capacity];
+        Node<K, V>[] newTable = (Node<K, V>[]) new Node[capacity];
 
         // Populate the new table with new hashes.
         for (Node<K, V> entry : table) {
-            if (entry == null) continue;
-
-            Node<K, V> current = entry;
-            while (current != null) {
-                int i = hash(current.key, capacity);
-                Node<K, V> temp = current.next;
-                current.next = newTable[i];
-                newTable[i] = current;
-                current = temp;
+            if (entry != null) {
+                Node<K, V> current = entry;
+                while (current != null) {
+                    int i = hash(current.key, capacity);
+                    Node<K, V> temp = current.next;
+                    current.next = newTable[i];
+                    newTable[i] = current;
+                    current = temp;
+                }
             }
         }
         table = newTable;
@@ -223,8 +231,11 @@ public class HashTable<K, V> {
         return result;
     }
 
+    /**
+     * Clear the table.
+     */
+    @SuppressWarnings("unchecked")
     public void clear () {
-        //noinspection unchecked
         table = (Node<K, V> []) new Node[capacity];
         size = 0;
     }

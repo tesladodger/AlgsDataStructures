@@ -12,7 +12,9 @@ public class LinearRegression {
 
     /**
      * Calculates the linear regression of a list of vectors.
+     *
      * @param points list of 2D vectors;
+     *
      * @return an array with the 'm' value at index 0 and b at index 1;
      */
     public static double[] function (List<Vector2D> points) {

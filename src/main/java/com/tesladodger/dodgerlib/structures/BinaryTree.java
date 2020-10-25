@@ -17,6 +17,9 @@ import java.util.NoSuchElementException;
  */
 public class BinaryTree<K extends Comparable<K>, V> extends AbstractTree<K, V> {
 
+    /**
+     * Constructor.
+     */
     public BinaryTree () {
         root = null;
         size = 0;
@@ -34,9 +37,8 @@ public class BinaryTree<K extends Comparable<K>, V> extends AbstractTree<K, V> {
             root = new Node<>(key, value);
             root.parent = null;
         }
-        else {
+        else
             insertIteratively(key, value);
-        }
         size++;
     }
 
@@ -57,16 +59,14 @@ public class BinaryTree<K extends Comparable<K>, V> extends AbstractTree<K, V> {
                     break;
                 }
                 current = current.left;
-            }
-            else if (key.compareTo(current.key) > 0) {
+            } else if (key.compareTo(current.key) > 0) {
                 if (current.right == null) {
                     current.right = new Node<>(key, value);
                     current.right.parent = current;
                     break;
                 }
                 current = current.right;
-            }
-            else {
+            } else {
                 current.value = value;
                 size--;
                 break;
@@ -81,6 +81,8 @@ public class BinaryTree<K extends Comparable<K>, V> extends AbstractTree<K, V> {
      * @param key of the node to delete;
      *
      * @return data represented by the deleted node;
+     *
+     * @throws NoSuchElementException if the tree is empty or the key is not present;
      */
     public V remove (K key) {
         V result;
@@ -105,18 +107,16 @@ public class BinaryTree<K extends Comparable<K>, V> extends AbstractTree<K, V> {
                 // D's right subtree is now E's right subtree, thus deleting D.
                 D.right = E.right;
                 // Update the parent.
-                if (D.right != null) {
+                if (D.right != null)
                     D.right.parent = D;
-                }
             }
             // D's successor is further down in its right subtree.
             else {
                 // Replace E's place in its parent with E's right subtree, which can be null.
                 E.parent.left = E.right;
                 // Update E's right subtree's parent, avoiding null pointer.
-                if (E.right != null) {
+                if (E.right != null)
                     E.right.parent = E.parent;
-                }
                 // Replace D's values with E's.
                 D.value = E.value;
                 D.key = E.key;
@@ -130,6 +130,8 @@ public class BinaryTree<K extends Comparable<K>, V> extends AbstractTree<K, V> {
      * Find the min value and remove it.
      *
      * @return min value;
+     *
+     * @throws NoSuchElementException when the tree is empty;
      */
     public V popMin () {
         if (isEmpty()) throw new NoSuchElementException("The tree is empty.");
@@ -143,6 +145,8 @@ public class BinaryTree<K extends Comparable<K>, V> extends AbstractTree<K, V> {
      * Find the min value and remove it.
      *
      * @return min value;
+     *
+     * @throws NoSuchElementException when the tree is empty;
      */
     public V popMax () {
         if (isEmpty()) throw new NoSuchElementException("The tree is empty.");

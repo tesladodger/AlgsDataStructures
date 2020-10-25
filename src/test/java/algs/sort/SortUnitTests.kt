@@ -1,9 +1,6 @@
 package algs.sort
 
-import com.tesladodger.dodgerlib.algs.sort.DualPivotQuickSort
-import com.tesladodger.dodgerlib.algs.sort.MergeSort
-import com.tesladodger.dodgerlib.algs.sort.MultiThreadSort
-import com.tesladodger.dodgerlib.algs.sort.QuickSort
+import com.tesladodger.dodgerlib.algs.sort.*
 
 import kotlin.random.Random
 

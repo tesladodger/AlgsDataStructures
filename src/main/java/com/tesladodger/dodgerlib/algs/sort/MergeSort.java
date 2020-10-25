@@ -4,7 +4,7 @@ package com.tesladodger.dodgerlib.algs.sort;
 /**
  * Merge sort with a helper array.
  */
-public class MergeSort implements SortingAlgorithm {
+public class MergeSort {
 
     /**
      * Suppress constructor.

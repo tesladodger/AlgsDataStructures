@@ -310,3 +310,7 @@ fun dynamicArrayUnitTest () {
     array.clear()
     assert(array.isEmpty)
 }
+
+fun redBlackTreeUnitTest () {
+    //todo
+}

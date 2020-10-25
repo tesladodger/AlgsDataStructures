@@ -5,7 +5,7 @@ package com.tesladodger.dodgerlib.algs.sort;
  * QuickSort in-place, with median of three on the middle pivot, and insertion sort below a certain
  * threshold.
  */
-public class QuickSort implements SortingAlgorithm {
+public class QuickSort {
 
     /**
      * Suppress constructor.

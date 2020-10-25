@@ -11,6 +11,12 @@ import java.util.NoSuchElementException;
  */
 public class PairingHeap<K extends Comparable<K>, V> {
 
+    /**
+     * Represents an element of the heap, a key-value pair.
+     *
+     * @param <K>
+     * @param <V>
+     */
     private static final class Node<K, V> {
         K key;
         V value;
@@ -24,11 +30,17 @@ public class PairingHeap<K extends Comparable<K>, V> {
         }
     }
 
+    /** Entry point of the heap. */
     private Node<K, V> root;
-    public enum Type {MIN, MAX}
-    private final Type type;
-    private int size;
 
+    /** In a MIN type heap, the root is the element with the least value. */
+    public enum Type {MIN, MAX}
+
+    /** Type of heap ordering. */
+    private final Type type;
+
+    /** Number of elements in the heap. */
+    private int size;
 
     /**
      * Constructor.
@@ -48,12 +60,13 @@ public class PairingHeap<K extends Comparable<K>, V> {
         this(Type.MIN);
     }
 
-
     /**
      * Return the value of the element with most priority (which is the root),
      * without deleting it.
      *
      * @return value of the root;
+     *
+     * @throws NoSuchElementException if the heap is empty;
      */
     public V peek () {
         if (isEmpty()) throw new NoSuchElementException("The Heap is empty.");
@@ -122,6 +135,8 @@ public class PairingHeap<K extends Comparable<K>, V> {
      *
      * @param key of the new node;
      * @param value of the new node (can be null);
+     *
+     * @throws IllegalArgumentException if the key is null;
      */
     public void insert (K key, V value) {
         if (key == null) throw new IllegalArgumentException("Key cannot be null.");
@@ -133,14 +148,14 @@ public class PairingHeap<K extends Comparable<K>, V> {
      * Removes the root of the heap and returns its value.
      *
      * @return value of the root;
+     *
+     * @throws NoSuchElementException when the heap is empty;
      */
     public V pop () {
         if (isEmpty()) throw new NoSuchElementException("The heap is empty");
-
         V result = root.value;
         root = mergeChildPairs(root);
         size--;
-
         return result;
     }
 
@@ -187,8 +202,7 @@ public class PairingHeap<K extends Comparable<K>, V> {
     }
 
     /**
-     * Logically clear the heap by nullifying its root. The garbage collection takes care of the
-     * rest.
+     * Logically clear the heap by nullifying its root.
      */
     public void clear () {
         size = 0;

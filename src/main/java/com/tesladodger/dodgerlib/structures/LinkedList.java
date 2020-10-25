@@ -1,11 +1,10 @@
 package com.tesladodger.dodgerlib.structures;
 
-
 import java.util.NoSuchElementException;
 
 
 /**
- * Basic methods of a linked list.
+ * Basic implementation of a linked list.
  *
  * @param <E>
  */
@@ -52,6 +51,8 @@ public class LinkedList<E> extends AbstractLinearStructure<E> implements List<E>
      * @param index wanted;
      *
      * @return the value at that index;
+     *
+     * @throws IndexOutOfBoundsException if the index exceeds the bounds of the list;
      */
     public E get (int index) {
         if (index < 0 || index >= size) throw new IndexOutOfBoundsException();
@@ -67,6 +68,8 @@ public class LinkedList<E> extends AbstractLinearStructure<E> implements List<E>
      * @param index to remove;
      *
      * @return the value of the removed index;
+     *
+     * @throws IndexOutOfBoundsException if the index exceeds the bounds of the list;
      */
     public E remove (int index) {
         if (index < 0 || index >= size) throw new IndexOutOfBoundsException();
@@ -93,6 +96,9 @@ public class LinkedList<E> extends AbstractLinearStructure<E> implements List<E>
      *
      * @param index to set;
      * @param data of the element;
+     *
+     * @throws NoSuchElementException if the list is empty;
+     * @throws IndexOutOfBoundsException if the index exceeds the bounds of the list;
      */
     public void set (int index, E data) {
         if (isEmpty()) throw new NoSuchElementException("The list is empty.");

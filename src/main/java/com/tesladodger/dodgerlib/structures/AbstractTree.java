@@ -23,12 +23,12 @@ abstract class AbstractTree<K extends Comparable<K>, V> implements Iterable <V> 
      * @param <V> value type;
      */
     protected static class Node<K, V> {
-        K key;
-        V value;
+        protected K key;
+        protected V value;
 
-        Node<K, V> parent = null;
-        Node<K, V> left = null;
-        Node<K, V> right = null;
+        protected Node<K, V> parent;
+        protected Node<K, V> left;
+        protected Node<K, V> right;
 
         protected Node (K key, V value) {
             this.key = key;
@@ -48,6 +48,8 @@ abstract class AbstractTree<K extends Comparable<K>, V> implements Iterable <V> 
      * @param key to find;
      *
      * @return value of that key;
+     *
+     * @throws NoSuchElementException when the tree is empty;
      */
     public V find (K key) {
         if (isEmpty()) throw new NoSuchElementException("The tree is empty.");
@@ -61,19 +63,18 @@ abstract class AbstractTree<K extends Comparable<K>, V> implements Iterable <V> 
      * @param key to find;
      *
      * @return node to be found;
+     *
+     * @throws NoSuchElementException if there is no element in the tree with the specified key;
      */
      protected Node<K, V> findIteratively (K key) {
         Node<K, V> current = root;
         while (current != null) {
-            if (key.compareTo(current.key) < 0) {
+            if (key.compareTo(current.key) < 0)
                 current = current.left;
-            }
-            else if (key.compareTo(current.key) > 0) {
+            else if (key.compareTo(current.key) > 0)
                 current = current.right;
-            }
-            else {
+            else
                 return current;
-            }
         }
         throw new NoSuchElementException("The key " + key + " is not in the tree.");
     }
@@ -115,11 +116,25 @@ abstract class AbstractTree<K extends Comparable<K>, V> implements Iterable <V> 
         return current;
     }
 
+    /**
+     * Gets the value of the node with the smallest key.
+     *
+     * @return value of the node with the least key;
+     *
+     * @throws NoSuchElementException when the tree is empty;
+     */
     public V findMin () {
         if (isEmpty()) throw new NoSuchElementException("The tree is empty.");
         return getMin(root).value;
     }
 
+    /**
+     * Gets the value of the node with the largest key.
+     *
+     * @return value of the node with the most key;
+     *
+     * @throws NoSuchElementException when the tree is empty;
+     */
     public V findMax () {
         if (isEmpty()) throw new NoSuchElementException("The tree is empty.");
         return getMax(root).value;
@@ -129,6 +144,8 @@ abstract class AbstractTree<K extends Comparable<K>, V> implements Iterable <V> 
      * Calls the recursive traverse method.
      *
      * @return sorted list of values;
+     *
+     * @throws NoSuchElementException when the tree is empty;
      */
     public List<V> traverse () {
         if (isEmpty()) throw new NoSuchElementException("Tree is empty.");
@@ -216,15 +233,28 @@ abstract class AbstractTree<K extends Comparable<K>, V> implements Iterable <V> 
         }
     }
 
+    /**
+     * Logically clears the tree by nullifying its root.
+     */
     public void clear () {
         root = null;
         size = 0;
     }
 
+    /**
+     * Check if there are any elements in the tree.
+     *
+     * @return true if the tree is empty;
+     */
     public boolean isEmpty () {
         return root == null;
     }
 
+    /**
+     * Number of elements in the tree.
+     *
+     * @return size;
+     */
     public int size () {
         return size;
     }

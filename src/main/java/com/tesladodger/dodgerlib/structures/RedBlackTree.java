@@ -51,6 +51,8 @@ public class RedBlackTree<K extends Comparable<K>, V> extends AbstractTree<K, V>
      *
      * @param key new key;
      * @param value new value;
+     *
+     * @throws IllegalArgumentException if the key is null;
      */
     public void insert (K key, V value) {
         if (key == null) throw new IllegalArgumentException("New key cannot be null.");
@@ -172,6 +174,8 @@ public class RedBlackTree<K extends Comparable<K>, V> extends AbstractTree<K, V>
      * @param key of the element to remove;
      *
      * @return the data corresponding to the key;
+     *
+     * @throws NoSuchElementException if the tree is empty or the node does not exist;
      */
     public V remove (K key) {
         if (isEmpty()) throw new NoSuchElementException("The tree is empty.");
@@ -188,7 +192,8 @@ public class RedBlackTree<K extends Comparable<K>, V> extends AbstractTree<K, V>
      * If D (the node to be deleted) has two non-null children, replace its value and key with the
      * in-order successor's, like a normal binary tree, and delete the node the values were copied
      * from (which has, at most, one non-null child).
-     * Otherwise,
+     * Otherwise, the algorithm consists of a series of methods taken straight from the pseudo-code
+     * in the wikipedia page.
      *
      * @param D node to delete;
      */
@@ -374,6 +379,28 @@ public class RedBlackTree<K extends Comparable<K>, V> extends AbstractTree<K, V>
         // n.left now points to what was on the right of n.left.
         n.left = leftRightSubtree;
         if (n.left != null) n.left.parent = n;
+    }
+
+    /**
+     * Used for debugging, to assert if a tree is properly balanced.
+     *
+     * @return true if the tree obeys the red black properties;
+     */
+    public final boolean isBalanced () {
+        // The root must be black
+        if (((RBNode<K, V>) root).color == RBNode.Color.RED)
+            return false;
+
+        // The children of a red node must be black
+        //todo
+
+        // Every path from a given node to its descendant null nodes goes through the same number
+        // of black nodes.
+
+
+
+
+        return true;
     }
 
 }

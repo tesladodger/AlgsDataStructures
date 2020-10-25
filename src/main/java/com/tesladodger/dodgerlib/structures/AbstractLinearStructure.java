@@ -92,10 +92,20 @@ public abstract class AbstractLinearStructure<E> implements Iterable<E> {
         }
     }
 
+    /**
+     * Number of elements on the structure.
+     *
+     * @return size;
+     */
     public int size () {
         return size;
     }
 
+    /**
+     * Check if there are any elements in the structure.
+     *
+     * @return true if the list is empty;
+     */
     public boolean isEmpty () {
         return root == null;
     }

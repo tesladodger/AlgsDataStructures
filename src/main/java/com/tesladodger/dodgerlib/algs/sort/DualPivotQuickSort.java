@@ -4,7 +4,7 @@ package com.tesladodger.dodgerlib.algs.sort;
 /**
  * Dual-Pivot Quicksort as described by Vladimir Yaroslavskiy.
  */
-public class DualPivotQuickSort implements SortingAlgorithm {
+public class DualPivotQuickSort {
 
     /**
      * Suppress constructor.

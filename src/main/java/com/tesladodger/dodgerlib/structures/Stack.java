@@ -32,6 +32,8 @@ public class Stack<E> extends AbstractLinearStructure<E> {
      * Remove the root.
      *
      * @return the value of the root;
+     *
+     * @throws NoSuchElementException if the stack is empty;
      */
     public E pop () {
         if (root == null) throw new NoSuchElementException("Stack is empty.");

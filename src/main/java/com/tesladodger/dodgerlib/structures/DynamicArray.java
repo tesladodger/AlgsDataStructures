@@ -13,14 +13,16 @@ public class DynamicArray<E> implements List<E>, Iterable<E> {
     /** Size of the internal array. */
     private int capacity;
 
+    private static final int DEFAULT_INITIAL_CAPACITY = 16;
+
     /** Number of elements on the array. */
     private int size;
 
     /**
-     * Default constructor with initial capacity of 16.
+     * Default constructor with default initial capacity.
      */
     public DynamicArray () {
-        this(16);
+        this(DEFAULT_INITIAL_CAPACITY);
     }
 
     /**
@@ -28,10 +30,10 @@ public class DynamicArray<E> implements List<E>, Iterable<E> {
      *
      * @param initialCapacity of the structure;
      */
+    @SuppressWarnings("unchecked")
     public DynamicArray (int initialCapacity) {
         size = 0;
         capacity = initialCapacity;
-        //noinspection unchecked
         array = (E[]) new Object[capacity];
     }
 
@@ -52,6 +54,8 @@ public class DynamicArray<E> implements List<E>, Iterable<E> {
      * @param index of the the data;
      *
      * @return data in the index;
+     *
+     * @throws IndexOutOfBoundsException if the index exceeds the bounds of the array;
      */
     public E get (int index) {
         if (index < 0 || index > size - 1)
@@ -65,6 +69,8 @@ public class DynamicArray<E> implements List<E>, Iterable<E> {
      * @param index of the element;
      *
      * @return data of that element;
+     *
+     * @throws IndexOutOfBoundsException if the index exceeds the bounds of the array;
      */
     public E remove (int index) {
         if (index < 0 || index > size - 1)
@@ -82,6 +88,8 @@ public class DynamicArray<E> implements List<E>, Iterable<E> {
      *
      * @param index to set;
      * @param data of the element;
+     *
+     * @throws IndexOutOfBoundsException if the index exceeds the bounds of the array;
      */
     public void set (int index, E data) {
         if (index < 0 || index > size - 1)
@@ -94,8 +102,8 @@ public class DynamicArray<E> implements List<E>, Iterable<E> {
      *
      * @param newCapacity of the structure;
      */
+    @SuppressWarnings("unchecked")
     private void changeCapacity (int newCapacity) {
-        //noinspection unchecked
         E[] newArray = (E[]) new Object[newCapacity];
         System.arraycopy(array, 0, newArray, 0, size);
         capacity = newCapacity;
@@ -110,8 +118,8 @@ public class DynamicArray<E> implements List<E>, Iterable<E> {
         return size;
     }
 
+    @SuppressWarnings("unchecked")
     public void clear () {
-        //noinspection unchecked
         array = (E[]) new Object[capacity];
         size = 0;
     }
